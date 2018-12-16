@@ -1,4 +1,8 @@
-require "bitmex/version"
+require 'httparty'
+require 'hashie'
+
+require 'bitmex/version'
+require 'bitmex/client'
 
 module Bitmex
   class Error < StandardError; end
