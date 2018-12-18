@@ -1,8 +1,8 @@
 # Bitmex
 
-[![Build Status](https://travis-ci.org/icostan/bitmex-ruby.svg?branch=master)](https://travis-ci.org/icostan/bitmex-ruby)
-[![Maintainability](https://api.codeclimate.com/v1/badges/80b1b2a8f94c560de51a/maintainability)](https://codeclimate.com/github/icostan/bitmex-ruby/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/80b1b2a8f94c560de51a/test_coverage)](https://codeclimate.com/github/icostan/bitmex-ruby/test_coverage)
+[![Build Status](https://travis-ci.org/icostan/bitmex-api-ruby.svg?branch=master)](https://travis-ci.org/icostan/bitmex-api-ruby)
+[![Maintainability](https://api.codeclimate.com/v1/badges/85c3eb58ef31dabc9159/maintainability)](https://codeclimate.com/github/icostan/bitmex-api-ruby/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/85c3eb58ef31dabc9159/test_coverage)](https://codeclimate.com/github/icostan/bitmex-api-ruby/test_coverage)
 
 Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/bitmex`. To experiment with that code, run `bin/console` for an interactive prompt.
 
