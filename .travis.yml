@@ -7,7 +7,7 @@ rvm:
 
 env:
   global:
-    - CC_TEST_REPORTER_ID=65254529fbf00609b87650c27a4edbc0ae3fb00889bba6c1cd8c5492e9764f8f
+    - CC_TEST_REPORTER_ID=62a2cea238cf89f14f968d9a91fe41af7a11f414f6cc9194df7abc7887e61f6e
 
 before_install:
   - gem install bundler -v 1.17.1
