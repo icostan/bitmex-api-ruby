@@ -4,14 +4,14 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require "bitmex/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "bitmex"
+  spec.name          = 'bitmex-api'
   spec.version       = Bitmex::VERSION
-  spec.authors       = ["Iulian Costan"]
-  spec.email         = ["iulian.costan@gmail.com"]
+  spec.authors       = ['Iulian Costan']
+  spec.email         = ['iulian.costan@gmail.com']
 
-  spec.summary       = %q{Ruby wrapper for Bitmex API}
-  spec.description   = %q{Ruby wrapper for Bitmex API}
-  spec.homepage      = 'https://github.com/icostan/bitmex-ruby'
+  spec.summary       = %q{Ruby library for Bitmex API}
+  spec.description   = %q{Ruby library for Bitmex API}
+  spec.homepage      = 'https://github.com/icostan/bitmex-api-ruby'
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
   # to allow pushing to a single host or delete this section to allow pushing to any host.
@@ -19,8 +19,8 @@ Gem::Specification.new do |spec|
     spec.metadata["allowed_push_host"] = 'https://rubygems.org'
 
     spec.metadata["homepage_uri"] = spec.homepage
-    spec.metadata["source_code_uri"] = 'https://github.com/icostan/bitmex-ruby.git'
-    spec.metadata["changelog_uri"] = 'https://github.com/icostan/bitmex-ruby/blob/master/CHANGELOG'
+    spec.metadata["source_code_uri"] = 'https://github.com/icostan/bitmex-api-ruby.git'
+    spec.metadata["changelog_uri"] = 'https://github.com/icostan/bitmex-api-ruby/blob/master/CHANGELOG'
   else
     raise "RubyGems 2.0 or newer is required to protect against " \
       "public gem pushes."
