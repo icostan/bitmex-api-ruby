@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 RSpec.describe Bitmex::Client do
+  subject { Bitmex::Client.new testnet: true }
+
   it '#announcement' do
     expect(subject.announcement).to be_kind_of Array
   end
@@ -55,8 +57,10 @@ RSpec.describe Bitmex::Client do
   end
 
   it '#trade' do
-    trades = subject.trade count: 66
-    expect(trades.size).to eq 66
+    trades = subject.trade symbol: 'XBTUSD', startTime: '2019-01-01', count: 10
+    expect(trades.size).to eq 10
+    expect(trades.first.symbol).to eq 'XBTUSD'
+    expect(trades.first.timestamp).to eq '2019-01-01T00:00:02.119Z'
   end
 
   it '#stats' do

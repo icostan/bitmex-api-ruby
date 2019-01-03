@@ -4,15 +4,16 @@ require 'json'
 require 'faye/websocket'
 require 'eventmachine'
 
-limit = ($1 || 10).to_i
-puts "==> Filter trades > #{limit} BTC"
+product = (ARGV.first || 'BTCUSD')
+limit = (ARGV[1] || 10).to_i
+puts "==> Filter trades > #{limit} #{product}"
 
 EM.run {
   ws = Faye::WebSocket::Client.new('wss://www.bitmex.com/realtime')
 
   ws.on :open do |event|
     p [:open]
-    ws.send '{"op": "subscribe", "args": ["trade:XBTUSD"]}'
+    ws.send "{\"op\": \"subscribe\", \"args\": [\"trade:#{product}\"]}"
   end
 
   ws.on :message do |event|

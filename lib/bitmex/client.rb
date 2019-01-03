@@ -2,8 +2,6 @@ module Bitmex
   class Client
     include HTTParty
 
-    base_uri 'https://testnet.bitmex.com/api/v1'
-
     ANNOUNCEMENT_ARGS = %w(urgent).freeze
     EXECUTION_ARGS = %w(tradeHistory).freeze
     FUNDING_ARGS = %w().freeze
@@ -20,8 +18,10 @@ module Bitmex
     STATS_ARGS = %w(history historyUSD).freeze
     TRADE_ARGS = %w(bucketed).freeze
 
-    def initialize(testnet: true)
-      @options = {}
+    attr_reader :base_url
+
+    def initialize(testnet: false)
+      @base_url = testnet ? 'https://testnet.bitmex.com/api/v1' : 'https://www.bitmex.com/api/v1'
     end
 
     def global_notification
@@ -71,8 +71,8 @@ module Bitmex
     def execute(endpoint, type, types, params, &ablock)
       check! type, types
 
-      uri = "/#{endpoint}/#{type}"
-      response = self.class.get uri, query: params
+      url = "#{base_url}/#{endpoint}/#{type}"
+      response = self.class.get url, query: params
       fail response.message unless response.success?
       yield response
     end
