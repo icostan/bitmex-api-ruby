@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Iulian Costan']
   spec.email         = ['iulian.costan@gmail.com']
 
-  spec.summary       = %q{Ruby library for Bitmex API}
-  spec.description   = %q{Ruby library for Bitmex API}
+  spec.summary       = %q{Ruby library for BitMEX API}
+  spec.description   = %q{Ruby library for BitMEX API}
   spec.homepage      = 'https://github.com/icostan/bitmex-api-ruby'
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
@@ -20,7 +20,7 @@ Gem::Specification.new do |spec|
 
     spec.metadata["homepage_uri"] = spec.homepage
     spec.metadata["source_code_uri"] = 'https://github.com/icostan/bitmex-api-ruby.git'
-    spec.metadata["changelog_uri"] = 'https://github.com/icostan/bitmex-api-ruby/blob/master/CHANGELOG'
+    spec.metadata["changelog_uri"] = 'https://github.com/icostan/bitmex-api-ruby/blob/master/CHANGELOG.md'
   else
     raise "RubyGems 2.0 or newer is required to protect against " \
       "public gem pushes."
