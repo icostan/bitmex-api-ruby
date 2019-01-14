@@ -25,15 +25,31 @@ Or install it yourself as:
 
 ## Usage
 
+Instantiate Bitmex client.
+
 ```ruby
-require 'bitmex'
+require 'bitmex-api'
 
 client = Bitmex::Client.new
+```
 
-# first 10 trades after Jan 1st for XBTUSD product
-trades = client.trade symbol: 'XBTUSD', count: 10, startTime: '2019-01-01'
+Load first 15 trades after Jan 1st for XBTUSD.
+
+```ruby
+trades = client.trade symbol: 'XBTUSD', count: 15, startTime: '2019-01-01'
 trades.size
 trades.first
+```
+
+Listen for new trades and print the ones greater than 10 XBT.
+
+```ruby
+client.listen trade: 'XBTUSD' do |trade|
+  puts trade if trade.homeNotional > 10
+
+  # when done call client.stop
+  # client.stop
+end
 ```
 
 ## Development

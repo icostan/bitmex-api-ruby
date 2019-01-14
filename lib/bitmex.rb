@@ -2,6 +2,7 @@ require 'httparty'
 require 'hashie'
 
 require 'bitmex/version'
+require 'bitmex/mash'
 require 'bitmex/client'
 
 module Bitmex

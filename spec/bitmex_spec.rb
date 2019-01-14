@@ -5,6 +5,13 @@ RSpec.describe Bitmex::Client do
 
   it '#announcement' do
     expect(subject.announcement).to be_kind_of Array
+    expect(subject.announcement type: :urgent).to be_kind_of Array
+  end
+
+  it '#apikey'
+
+  it '#chat' do
+    expect(subject.chat).to be_kind_of Array
   end
 
   it '#execution'
@@ -77,4 +84,17 @@ RSpec.describe Bitmex::Client do
 
   it 'user'
   it 'user_event'
+
+  it 'listen' do
+    topics = {}
+    topics[:trade] = 'XBTUSD'
+    topics[:chat] = ''
+
+    subject.listen topics do |data|
+      expect(data.symbol).to eq 'XBTUSD' if data.topic == 'trade'
+      expect(data.user).not_to be_nil if data.topic == 'chat'
+
+      subject.stop
+    end
+  end
 end
