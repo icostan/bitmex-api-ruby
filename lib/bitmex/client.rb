@@ -7,55 +7,45 @@ module Bitmex
     include HTTParty
 
     ANNOUNCEMENT_ARGS = %w(urgent).freeze
+    APIKEY_ARGS = %w().freeze
     CHAT_ARGS = %w(channels connected).freeze
-    EXECUTION_ARGS = %w(tradeHistory).freeze
+    EXECUTION_ARGS = %w(tradehistory).freeze
     FUNDING_ARGS = %w().freeze
     GLOBALNOTIFICATION_ARGS = %w().freeze
-    INSTRUMENT_ARGS = %w(active activeAndIndices activeIntervals compositeIndex indices).freeze
+    INSTRUMENT_ARGS = %w(active activeandindices activeintervals compositeindex indices).freeze
     INSURANCE_ARGS = %w().freeze
     LEADERBOARD_ARGS = %w().freeze
     LIQUIDATION_ARGS = %w().freeze
     ORDER_ARGS = %w().freeze
     ORDERBOOK_ARGS = %w(L2).freeze
+    POSITION_ARGS = %w().freeze
     QUOTE_ARGS = %w(bucketed).freeze
-    SCHEMA_ARGS = %w(websocketHelp).freeze
+    SCHEMA_ARGS = %w(websockethelp).freeze
     SETTLEMENT_ARGS = %w().freeze
-    STATS_ARGS = %w(history historyUSD).freeze
+    STATS_ARGS = %w(history historyusd).freeze
     TRADE_ARGS = %w(bucketed).freeze
+    USER_ARGS = %w().freeze
+    USEREVENT_ARGS = %w().freeze
 
     TESTNET_HOST = 'testnet.bitmex.com'.freeze
     MAINNET_HOST = 'www.bitmex.com'.freeze
 
-    attr_reader :host
+    AUTHORIZATIONS = %w(apikey execution position globalnotification order leaderboard quote user userevent)
 
-    def initialize(testnet: false)
+    attr_reader :host, :api_key, :api_secret
+
+    def initialize(testnet: false, api_key: nil, api_secret: nil)
       @host = testnet ? TESTNET_HOST : MAINNET_HOST
+      @api_key = api_key
+      @api_secret = api_secret
     end
 
-    def global_notification
-    end
-
-    def leaderboard
-    end
-
-    def order
-    end
-
-    def order_book(symbol)
-      execute 'orderbook', 'L2', ORDERBOOK_ARGS, symbol: symbol do |response|
+    def orderbook(symbol)
+      execute 'orderbook', 'L2', { symbol: symbol } do |response|
         response.to_a.map do |s|
           Bitmex::Mash.new s
         end
       end
-    end
-
-    def position
-    end
-
-    def user
-    end
-
-    def user_event
     end
 
     #
@@ -69,6 +59,7 @@ module Bitmex
 
         topics = options.map{ |key, value| "#{key}:#{value}"}
         subscription = { op: :subscribe, args: topics }
+        # puts subscription
 
         ws.on :open do |event|
           ws.send subscription.to_json.to_s
@@ -92,6 +83,7 @@ module Bitmex
         end
 
         ws.on :close do |event|
+          # p [:close, event.reason]
           ws = nil
         end
       end
@@ -109,9 +101,14 @@ module Bitmex
     def method_missing(m, *args, &ablock)
       name = m.to_s.gsub '_', ''
       params = args.first || {}
-      type = params.delete :type
+      type = params&.delete :type
       types = self.class.const_get "#{name.upcase}_ARGS"
-      execute name, type, types, params do |response|
+      check! type, types
+
+      params[:auth] = auth_required? name
+
+      execute name, type, params do |response|
+        # p response.body
         if response.parsed_response.is_a? Array
           response.to_a.map do |s|
             Bitmex::Mash.new s
@@ -122,13 +119,33 @@ module Bitmex
       end
     end
 
-    def execute(endpoint, type, types, params, &ablock)
-      check! type, types
+    def auth_required?(action)
+      AUTHORIZATIONS.include? action
+    end
 
+    def execute(endpoint, type, params, &ablock)
       url = "#{rest_url}/#{endpoint}/#{type}"
-      response = self.class.get url, query: params
-      fail response.message unless response.success?
+      path = "/api/v1/#{endpoint}/#{type}"
+      auth = params&.delete(:auth)
+      params = nil if params&.empty?
+
+      options = { query: params }
+      options[:headers] = headers 'GET', path, '' if auth
+
+      response = self.class.get url, options
+      fail response.body unless response.success?
       yield response
+    end
+
+    def headers(verb, path, data)
+      raise 'api_key and api_secret are required' unless api_key || api_secret
+
+      expires = Time.now.utc.to_i + 60
+      {
+        'api-expires' => expires.to_s,
+        'api-key' => api_key,
+        'api-signature' => Bitmex.signature(api_secret, verb, path, expires, data)
+      }
     end
 
     def check!(type, types)
