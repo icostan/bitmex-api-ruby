@@ -1,3 +1,7 @@
+require 'dotenv'
+Dotenv.load
+Dotenv.require_keys('API_KEY', 'API_SECRET')
+
 require 'simplecov'
 SimpleCov.start do
   add_filter '/spec/'
