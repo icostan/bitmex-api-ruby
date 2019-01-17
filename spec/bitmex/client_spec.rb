@@ -109,12 +109,6 @@ RSpec.describe Bitmex::Client do
     expect(trades.first.timestamp).to eq '2019-01-01T00:00:02.119Z'
   end
 
-  it '#user' do
-    user = subject.user
-    expect(user.id).to eq 173686
-    expect(user.firstname).to eq 'Iulian'
-  end
-
   it '#userevent' do
     user = subject.userevent
     events = user.userEvents

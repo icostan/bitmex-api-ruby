@@ -1,10 +1,12 @@
 require 'json'
 require 'faye/websocket'
 require 'eventmachine'
+require 'logger'
 
 module Bitmex
   class Client
     include HTTParty
+    # logger ::Logger.new(STDOUT), :debug, :curl
 
     ANNOUNCEMENT_ARGS = %w(urgent).freeze
     APIKEY_ARGS = %w().freeze
@@ -89,11 +91,36 @@ module Bitmex
       end
     end
 
+    def user
+      Bitmex::User.new self
+    end
+
     #
     # Stop websocket listener
     #
     def stop
       EM.stop_event_loop
+    end
+
+    def get(path, params: {}, auth: false)
+      options = {}
+      options[:query] = params unless params.empty?
+      options[:headers] = headers 'GET', path, '' if auth
+
+      response = self.class.get "#{domain_url}#{path}", options
+      yield response
+    end
+
+    def put(path, params: {}, auth: true, json: true)
+      body = json ? params.to_json.to_s : URI.encode_www_form(params)
+
+      options = {}
+      options[:body] = body
+      options[:headers] = headers 'PUT', path, body, json: json if auth
+
+      response = self.class.put "#{domain_url}#{path}", options
+      puts response.body
+      yield response
     end
 
     private
@@ -137,15 +164,21 @@ module Bitmex
       yield response
     end
 
-    def headers(verb, path, data)
+    def headers(verb, path, body, json: true)
       raise 'api_key and api_secret are required' unless api_key || api_secret
 
       expires = Time.now.utc.to_i + 60
-      {
+      headers = {
         'api-expires' => expires.to_s,
         'api-key' => api_key,
-        'api-signature' => Bitmex.signature(api_secret, verb, path, expires, data)
+        'api-signature' => Bitmex.signature(api_secret, verb, path, expires, body)
       }
+      if json
+        headers['Content-Type'] = 'application/json'
+      else
+        headers['Content-Type'] = 'application/x-www-form-urlencoded'
+      end
+      headers
     end
 
     def check!(type, types)
@@ -155,6 +188,10 @@ module Bitmex
 
     def rest_url
       "https://#{host}/api/v1"
+    end
+
+    def domain_url
+      "https://#{host}"
     end
 
     def realtime_url

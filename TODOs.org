@@ -3,11 +3,14 @@
    SCHEDULED: <2019-01-03 Thu> CLOSED: <2019-01-03 Thu>
 ** DONE websocket API
    CLOSED: [2019-01-14] SCHEDULED: <2019-01-14 Fri>
-** DONE REST API: private read
-   CLOSED: [2019-01-16 Wed] DEADLINE: <2019-01-16 Wed>
+** DONE auth for REST-API endpoints
+   CLOSED: [2019-01-16 Wed] SCHEDULED: <2019-01-15 Tue> DEADLINE: <2019-01-16 Wed>
 ** TODO auth for private subscription topics
    DEADLINE: <2019-01-25 Fri>
 ** move from rspec to minitest
 ** configure autorun
 ** TODO post/put rest-api endpoints
 ** hearbeat, ping/pong
+** TODO implement user actions get/put/post
+   SCHEDULED: <2019-01-17 Thu>
+** order actions
