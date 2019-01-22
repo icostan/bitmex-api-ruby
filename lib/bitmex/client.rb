@@ -26,8 +26,6 @@ module Bitmex
     SETTLEMENT_ARGS = %w().freeze
     STATS_ARGS = %w(history historyusd).freeze
     TRADE_ARGS = %w(bucketed).freeze
-    USER_ARGS = %w().freeze
-    USEREVENT_ARGS = %w().freeze
 
     TESTNET_HOST = 'testnet.bitmex.com'.freeze
     MAINNET_HOST = 'www.bitmex.com'.freeze

@@ -1,6 +1,9 @@
 module Bitmex
   # Account Operations
   #
+  # All read-only operations to load user's data are implemented and work as described in docs.
+  # Multiple PUT/POST endpoints return 'Access Denied' and are not implemented. It seems that they are meant to be used internally by BitMEX only.
+  #
   # @author Iulian Costan
   class User
     attr_reader :client
@@ -18,7 +21,7 @@ module Bitmex
 
     # Check if a referral code is valid. If the code is valid, responds with the referral code's discount (e.g. 0.1 for 10%) and false otherwise
     # @param referral code
-    # @return [Decimal] the discount or nil
+    # @return [Decimal, nil] the discount or nil
     def check_referral_code(code)
       get 'checkReferralCode', referralCode: code do |response|
         return nil if !response.success? && [404, 451].include?(response.code)
@@ -85,15 +88,11 @@ module Bitmex
       get 'walletSummary'
     end
 
-    # NOT ALLOWED
-    # @param attributes [Hash]
-    # @return true if request was successful, false otherwise
-    def update_attributes(attributes)
-      put '', attributes do |response|
-        fail response.body unless response.success?
-
-        response.success?
-      end
+    # Get your user events
+    # @return [Array] the events
+    def events
+      data = get '', resource: 'userEvent'
+      data.userEvents
     end
 
     private
@@ -135,8 +134,9 @@ module Bitmex
       end
     end
 
-    def user_path(uri, params = {})
-      path = "/api/v1/user/#{uri}"
+    def user_path(action, params = {})
+      resource = params.delete(:resource) || 'user'
+      path = "/api/v1/#{resource}/#{action}"
       # TODO: find a better way to handle multiple parameters, dig into HTTParty
       path += '?' if params.size.positive?
       params.each do |key, value|

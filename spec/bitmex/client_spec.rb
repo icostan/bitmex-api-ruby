@@ -73,7 +73,7 @@ RSpec.describe Bitmex::Client do
     it 'default' do
       positions = subject.position
       expect(positions).to be_kind_of Array
-      expect(positions.size).to eq 1
+      expect(positions.size).to eq 0
     end
   end
 
@@ -107,13 +107,6 @@ RSpec.describe Bitmex::Client do
     expect(trades.size).to eq 10
     expect(trades.first.symbol).to eq 'XBTUSD'
     expect(trades.first.timestamp).to eq '2019-01-01T00:00:02.119Z'
-  end
-
-  it '#userevent' do
-    user = subject.userevent
-    events = user.userEvents
-    expect(events.size).to be >= 1
-    expect(events.first.userId).to eq 173686
   end
 
   describe '#listen' do

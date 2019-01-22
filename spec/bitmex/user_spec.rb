@@ -1,4 +1,3 @@
-
 require 'spec_helper'
 
 RSpec.describe Bitmex::User do
@@ -19,14 +18,14 @@ RSpec.describe Bitmex::User do
     end
   end
 
-  it '#update_attributes'
+  xit '#update_attributes'
 
   it '#affiliate_status' do
     status = client.user.affiliate_status
     expect(status.affiliatePayout).to be_nil
   end
 
-  it '#cancel_withdrawal'
+  xit '#cancel_withdrawal'
 
   it '#check_referral_code' do
     discount = client.user.check_referral_code '7wUFhY'
@@ -40,17 +39,17 @@ RSpec.describe Bitmex::User do
     expect(commission.XBTUSD.settlementFee).to eq 0
   end
 
-  it '#communication_token'
-  it '#confirm_email'
-  it '#confirm_enable_tfa'
-  it '#confirm_withdrawal'
+  xit '#communication_token'
+  xit '#confirm_email'
+  xit '#confirm_enable_tfa'
+  xit '#confirm_withdrawal'
 
   it '#deposit_address' do
     address = client.user.deposit_address 'XBt'
     expect(address).to eq '"2NBMEXtoNm2fJgQEQ85xLTdzHfNMdKYTses"'
   end
 
-  it '#disable_tfa'
+  xit '#disable_tfa'
 
   it '#execution_history' do
     history = client.user.execution_history 'XBTUSD', Date.new(2019, 1, 17)
@@ -58,8 +57,8 @@ RSpec.describe Bitmex::User do
     expect(history.first.orderQty).to eq 100
   end
 
-  it '#logout'
-  it '#logout_all'
+  xit '#logout'
+  xit '#logout_all'
 
   it '#margin' do
     margin = client.user.margin 'XBt'
@@ -71,9 +70,9 @@ RSpec.describe Bitmex::User do
     expect(fee.minFee).to eq 20000
   end
 
-  it '#preferences'
-  it '#request_enable_tfa'
-  it '#request_withdrawal'
+  xit '#preferences'
+  xit '#request_enable_tfa'
+  xit '#request_withdrawal'
 
   it '#wallet' do
     wallet = client.user.wallet
@@ -90,5 +89,11 @@ RSpec.describe Bitmex::User do
     wallet_summary = client.user.wallet_summary
     expect(wallet_summary.first.transactType).to eq 'RealisedPNL'
     expect(wallet_summary.first.amount).to eq -17556
+  end
+
+  it '#events' do
+    events = client.user.events
+    expect(events.size).to be >= 1
+    expect(events.first.userId).to eq 173686
   end
 end
