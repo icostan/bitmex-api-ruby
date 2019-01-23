@@ -4,6 +4,7 @@ require 'hashie'
 require 'bitmex/version'
 require 'bitmex/mash'
 require 'bitmex/user'
+require 'bitmex/trade'
 require 'bitmex/client'
 
 module Bitmex

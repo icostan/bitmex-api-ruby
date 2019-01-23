@@ -14,3 +14,5 @@
 ** DONE implement user actions get/put/post
    CLOSED: [2019-01-22 Tue] SCHEDULED: <2019-01-17 Thu>
 ** order actions
+** TODO trade resource
+   SCHEDULED: <2019-01-23 Wed>

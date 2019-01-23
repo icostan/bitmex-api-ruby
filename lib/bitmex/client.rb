@@ -89,6 +89,14 @@ module Bitmex
       end
     end
 
+    # Individual and bucketed trades
+    # @return [Bitmex::Trade] the trade model
+    def trades
+      Bitmex::Trade.new self
+    end
+
+    # Account operations
+    # @return [Bitmex::User] the user model
     def user
       Bitmex::User.new self
     end
@@ -100,7 +108,7 @@ module Bitmex
       EM.stop_event_loop
     end
 
-    def get(path, params: {}, auth: false)
+    def get(path, params: {}, auth: false, &ablock)
       options = {}
       options[:query] = params unless params.empty?
       options[:headers] = headers 'GET', path, '' if auth

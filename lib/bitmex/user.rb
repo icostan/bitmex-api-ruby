@@ -20,7 +20,7 @@ module Bitmex
     end
 
     # Check if a referral code is valid. If the code is valid, responds with the referral code's discount (e.g. 0.1 for 10%) and false otherwise
-    # @param referral code
+    # @param code [String] the referral code
     # @return [Decimal, nil] the discount or nil
     def check_referral_code(code)
       get 'checkReferralCode', referralCode: code do |response|
