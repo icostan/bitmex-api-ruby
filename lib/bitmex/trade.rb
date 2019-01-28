@@ -1,7 +1,7 @@
 module Bitmex
   # Individual and bucketed trades
   # @author Iulian Costan
-  class Trade
+  class Trade < Base
     attr_reader :client
 
     # @param client [Bitmex::Client] the client object
@@ -44,22 +44,8 @@ module Bitmex
 
     private
 
-    def response_handler(response)
-      fail response.body unless response.success?
-
-      if response.parsed_response.is_a? Array
-        response.to_a.map { |s| Bitmex::Mash.new s }
-      else
-        Bitmex::Mash.new response
-      end
-    end
-
-    def requires!(arg, args)
-      raise ArgumentError, "argument '#{arg}' is required" unless args.include? arg
-    end
-
     def trades_path(action = '')
-      "/api/v1/trade/#{action}"
+      base_path :trade, action
     end
   end
 end

@@ -16,3 +16,5 @@
 ** order actions
 ** TODO trade resource
    SCHEDULED: <2019-01-23 Wed>
+** DONE stats resource
+   CLOSED: [2019-01-28 Mon] SCHEDULED: <2019-01-28 Mon>

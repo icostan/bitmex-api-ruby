@@ -48,6 +48,24 @@ module Bitmex
       end
     end
 
+    # Exchange statistics
+    # @return [Bitmex::Stats] the stats model
+    def stats
+      Bitmex::Stats.new self
+    end
+
+    # Individual and bucketed trades
+    # @return [Bitmex::Trade] the trade model
+    def trades
+      Bitmex::Trade.new self
+    end
+
+    # Account operations
+    # @return [Bitmex::User] the user model
+    def user
+      Bitmex::User.new self
+    end
+
     #
     # WebSocket API
     #
@@ -87,18 +105,6 @@ module Bitmex
           ws = nil
         end
       end
-    end
-
-    # Individual and bucketed trades
-    # @return [Bitmex::Trade] the trade model
-    def trades
-      Bitmex::Trade.new self
-    end
-
-    # Account operations
-    # @return [Bitmex::User] the user model
-    def user
-      Bitmex::User.new self
     end
 
     #

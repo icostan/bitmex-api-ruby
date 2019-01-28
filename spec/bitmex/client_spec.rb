@@ -90,18 +90,6 @@ RSpec.describe Bitmex::Client do
     expect(subject.settlement).to be_kind_of Array
   end
 
-  it '#stats' do
-    stats = subject.stats
-    expect(stats).to be_kind_of Array
-    instrument = stats.first
-    expect(instrument).to be_a Hashie::Mash
-    expect(instrument.rootSymbol).to include 'A50'
-    expect(instrument.openInterest).to be >= 0
-
-    expect(subject.stats type: :history).to be_kind_of Array
-    expect{ subject.stats type: :bad }.to raise_error ArgumentError
-  end
-
   describe '#listen' do
     it 'to single topic' do
       subject.listen trade: 'XBTUSD' do |trade|

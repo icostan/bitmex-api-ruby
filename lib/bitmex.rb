@@ -4,6 +4,8 @@ require 'hashie'
 require 'bitmex/version'
 require 'bitmex/mash'
 require 'bitmex/user'
+require 'bitmex/base'
+require 'bitmex/stats'
 require 'bitmex/trade'
 require 'bitmex/client'
 
