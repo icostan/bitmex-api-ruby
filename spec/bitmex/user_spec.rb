@@ -62,7 +62,7 @@ RSpec.describe Bitmex::User do
 
   it '#margin' do
     margin = client.user.margin 'XBt'
-    expect(margin.availableMargin).to eq 982444
+    expect(margin.availableMargin).to be >= 500_000
   end
 
   it '#min_withdrawal_fee' do
@@ -81,8 +81,8 @@ RSpec.describe Bitmex::User do
 
   it '#wallet_history' do
     wallet_history = client.user.wallet_history
-    expect(wallet_history.first.transactType).to eq 'RealisedPNL'
-    expect(wallet_history.first.amount).to eq -17556
+    expect(wallet_history.last.transactType).to eq 'Transfer'
+    expect(wallet_history.last.amount).to eq 1000000
   end
 
   it '#wallet_summary' do

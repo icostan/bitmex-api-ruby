@@ -5,9 +5,11 @@ require 'bitmex/version'
 require 'bitmex/mash'
 require 'bitmex/user'
 require 'bitmex/base'
-require 'bitmex/stats'
-require 'bitmex/trade'
 require 'bitmex/client'
+require 'bitmex/trade'
+require 'bitmex/stats'
+require 'bitmex/quote'
+require 'bitmex/position'
 
 module Bitmex
   class Error < StandardError; end

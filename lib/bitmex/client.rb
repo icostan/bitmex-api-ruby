@@ -20,12 +20,6 @@ module Bitmex
     LIQUIDATION_ARGS = %w().freeze
     ORDER_ARGS = %w().freeze
     ORDERBOOK_ARGS = %w(L2).freeze
-    POSITION_ARGS = %w().freeze
-    QUOTE_ARGS = %w(bucketed).freeze
-    SCHEMA_ARGS = %w(websockethelp).freeze
-    SETTLEMENT_ARGS = %w().freeze
-    STATS_ARGS = %w(history historyusd).freeze
-    TRADE_ARGS = %w(bucketed).freeze
 
     TESTNET_HOST = 'testnet.bitmex.com'.freeze
     MAINNET_HOST = 'www.bitmex.com'.freeze
@@ -48,6 +42,41 @@ module Bitmex
       end
     end
 
+    # Summary of Open and Closed Positions
+    # @return [Array] the list positions
+    def positions
+      Bitmex::Position.new(self).all
+    end
+
+    # Get an open position
+    # @param symbol [String] symbol of position
+    # @return [Bitmex::Position] open position
+    def position(symbol)
+      Bitmex::Position.new(self, symbol)
+    end
+
+    # Best Bid/Offer Snapshots & Historical Bins
+    # @return [Bitmex::Quote] the quote model
+    def quotes
+      Bitmex::Quote.new self
+    end
+
+    # Get model schemata for data objects returned by this AP
+    # @return [Hash] the schema
+    def schema
+      get base_path(:schema) do |response|
+        response_handler response
+      end
+    end
+
+    # Get settlement history
+    # @return [Array] the settlement history
+    def settlement
+      get base_path(:settlement) do |response|
+        response_handler response
+      end
+    end
+
     # Exchange statistics
     # @return [Bitmex::Stats] the stats model
     def stats
@@ -66,6 +95,7 @@ module Bitmex
       Bitmex::User.new self
     end
 
+    # TODO: move into WS client
     #
     # WebSocket API
     #
@@ -114,6 +144,7 @@ module Bitmex
       EM.stop_event_loop
     end
 
+    # TODO: move these methods into rest client
     def get(path, params: {}, auth: false, &ablock)
       options = {}
       options[:query] = params unless params.empty?
@@ -131,8 +162,32 @@ module Bitmex
       options[:headers] = headers 'PUT', path, body, json: json if auth
 
       response = self.class.put "#{domain_url}#{path}", options
-      puts response.body
       yield response
+    end
+
+    def post(path, params: {}, auth: true, json: true)
+      body = json ? params.to_json.to_s : URI.encode_www_form(params)
+
+      options = {}
+      options[:body] = body
+      options[:headers] = headers 'POST', path, body, json: json if auth
+
+      response = self.class.post "#{domain_url}#{path}", options
+      yield response
+    end
+
+    def base_path(resource, action = '')
+      "/api/v1/#{resource}/#{action}"
+    end
+
+    def response_handler(response)
+      fail response.body unless response.success?
+
+      if response.parsed_response.is_a? Array
+        response.to_a.map { |s| Bitmex::Mash.new s }
+      else
+        Bitmex::Mash.new response
+      end
     end
 
     private

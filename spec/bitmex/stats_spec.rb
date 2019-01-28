@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe Bitmex::Client do
+RSpec.describe Bitmex::Stats do
   subject { Bitmex::Client.new testnet: true, api_key: ENV['API_KEY'], api_secret: ENV['API_SECRET'] }
 
   it '#current' do

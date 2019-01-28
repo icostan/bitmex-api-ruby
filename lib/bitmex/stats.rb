@@ -2,13 +2,6 @@ module Bitmex
   # Exchange statistics
   # @author Iulian Costan
   class Stats < Base
-    attr_reader :client
-
-    # @param client [Bitmex::Client] the client object
-    def initialize(client)
-      @client = client
-    end
-
     # Get exchange-wide and per-series turnover and volume statistics
     # @return [Array] the statistics
     def current

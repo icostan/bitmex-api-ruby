@@ -12,13 +12,7 @@ module Bitmex
     protected
 
     def response_handler(response)
-      fail response.body unless response.success?
-
-      if response.parsed_response.is_a? Array
-        response.to_a.map { |s| Bitmex::Mash.new s }
-      else
-        Bitmex::Mash.new response
-      end
+      client.response_handler response
     end
 
     def requires!(arg, args)
@@ -26,7 +20,7 @@ module Bitmex
     end
 
     def base_path(resource, action)
-      "/api/v1/#{resource}/#{action}"
+      client.base_path resource, action
     end
   end
 end

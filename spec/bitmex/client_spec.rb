@@ -62,32 +62,28 @@ RSpec.describe Bitmex::Client do
 
   it '#order' do
     orders = subject.order
-    expect(orders.size).to eq 2
+    expect(orders.size).to be >= 4
   end
 
   it '#orderbook' do
     expect(subject.orderbook 'XBTUSD').to be_kind_of Array
   end
 
-  describe '#position' do
-    it 'default' do
-      positions = subject.position
-      expect(positions).to be_kind_of Array
-      expect(positions.size).to eq 0
-    end
-  end
-
-  xit '#quote' do
-    quotes = subject.quote
-    expect(quotes.size).to eq 1
-  end
-
   it '#schema' do
-    expect(subject.schema).to be_kind_of Hash
+    schema = subject.schema
+    expect(schema).to be_kind_of Hash
+    expect(schema['Affiliate']['keys']).to eq ['account', 'currency']
   end
 
-  it '#settlement' do
-    expect(subject.settlement).to be_kind_of Array
+  describe '#settlement' do
+    it 'with rest api' do
+      settlement = subject.settlement
+      expect(settlement).to be_kind_of Array
+      expect(settlement.first.symbol).to eq 'XBU24H'
+      expect(settlement.first.settlementType).to eq 'Settlement'
+      expect(settlement.first.settlePrice).to be_nil
+    end
+    it 'with ws api'
   end
 
   describe '#listen' do
