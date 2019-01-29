@@ -60,13 +60,15 @@ RSpec.describe Bitmex::Client do
     expect(subject.liquidation).to be_kind_of Array
   end
 
-  it '#order' do
-    orders = subject.order
-    expect(orders.size).to be >= 4
-  end
-
-  it '#orderbook' do
-    expect(subject.orderbook 'XBTUSD').to be_kind_of Array
+  describe '#orderbook' do
+    it 'with rest api' do
+      orderbook = subject.orderbook 'XBTUSD', depth: 1
+      expect(orderbook.size).to eq 2
+      expect(orderbook.first.symbol).to eq 'XBTUSD'
+      expect(orderbook.first.side).to eq 'Sell'
+      expect(orderbook.last.side).to eq 'Buy'
+    end
+    it 'with websocket api'
   end
 
   it '#schema' do

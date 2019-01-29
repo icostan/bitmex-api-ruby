@@ -13,8 +13,11 @@
 ** hearbeat, ping/pong
 ** DONE implement user actions get/put/post
    CLOSED: [2019-01-22 Tue] SCHEDULED: <2019-01-17 Thu>
-** order actions
-** TODO trade resource
-   SCHEDULED: <2019-01-23 Wed>
-** DONE stats resource
+** DONE trade resource
+   CLOSED: [2019-01-23] SCHEDULED: [2019-01-23 Wed]
+** DONE stats, settlement, schema, quote, position resources
    CLOSED: [2019-01-28 Mon] SCHEDULED: <2019-01-28 Mon>
+** DONE orderbook, order resource
+   CLOSED: [2019-01-29 Tue] SCHEDULED: <2019-01-29 Tue>
+** refactoring: use class methods when working with multiple entities
+** issue: fix filter all open order scenario

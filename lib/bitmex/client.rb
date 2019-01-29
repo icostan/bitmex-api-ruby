@@ -18,8 +18,6 @@ module Bitmex
     INSURANCE_ARGS = %w().freeze
     LEADERBOARD_ARGS = %w().freeze
     LIQUIDATION_ARGS = %w().freeze
-    ORDER_ARGS = %w().freeze
-    ORDERBOOK_ARGS = %w(L2).freeze
 
     TESTNET_HOST = 'testnet.bitmex.com'.freeze
     MAINNET_HOST = 'www.bitmex.com'.freeze
@@ -34,17 +32,38 @@ module Bitmex
       @api_secret = api_secret
     end
 
-    def orderbook(symbol)
-      execute 'orderbook', 'L2', { symbol: symbol } do |response|
-        response.to_a.map do |s|
-          Bitmex::Mash.new s
-        end
+    # Order Placement, Cancellation, Amending, and History
+    # @return [Bitmex::Order] the order model
+    def orders
+      # TODO: use class method
+      Bitmex::Order.new(self)
+    end
+
+    # Get an order by id
+    # @param orderID [String] the order #
+    # @param clOrdID [String] the client order #
+    # @return [Bitmex::Order] the order model
+    def order(orderID: nil, clOrdID: nil)
+      raise ArgumentError, 'either orderID or clOrdID is required' if orderID.nil? && clOrdID.nil?
+
+      Bitmex::Order.new(self, orderID, clOrdID)
+    end
+
+    # Get current orderbook in vertical format
+    # @param symbol [String] instrument symbol, send a series (e.g. XBT) to get data for the nearest contract in that series
+    # @param depth [Integer] orderbook depth per side. send 0 for full depth.
+    # @return [Array] the orderbook
+    def orderbook(symbol, depth: 25)
+      params = { symbol: symbol, depth: depth }
+      get base_path('orderbook/L2'), params: params do |response|
+        response_handler response
       end
     end
 
     # Summary of Open and Closed Positions
-    # @return [Array] the list positions
+    # @return [Array] the list of positions
     def positions
+      # TODO: use class method
       Bitmex::Position.new(self).all
     end
 
@@ -58,6 +77,7 @@ module Bitmex
     # Best Bid/Offer Snapshots & Historical Bins
     # @return [Bitmex::Quote] the quote model
     def quotes
+      # TODO: use class method
       Bitmex::Quote.new self
     end
 
@@ -173,6 +193,17 @@ module Bitmex
       options[:headers] = headers 'POST', path, body, json: json if auth
 
       response = self.class.post "#{domain_url}#{path}", options
+      yield response
+    end
+
+    def delete(path, params: {}, auth: true, json: true)
+      body = json ? params.to_json.to_s : URI.encode_www_form(params)
+
+      options = {}
+      options[:body] = body
+      options[:headers] = headers 'DELETE', path, body, json: json if auth
+
+      response = self.class.delete "#{domain_url}#{path}", options
       yield response
     end
 

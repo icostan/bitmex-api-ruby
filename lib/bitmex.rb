@@ -10,6 +10,7 @@ require 'bitmex/trade'
 require 'bitmex/stats'
 require 'bitmex/quote'
 require 'bitmex/position'
+require 'bitmex/order'
 
 module Bitmex
   class Error < StandardError; end

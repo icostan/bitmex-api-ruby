@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Changed
-- Trades
+- Trade resource
+- Stats, settlement, schema, quote, position resources
+- Orderbook, order resources
 
 ## [0.0.2] - 2019-01-22
 ### Added
