@@ -14,7 +14,7 @@ RSpec.describe Bitmex::Stats do
 
   it '#history' do
     history = subject.stats.history
-    expect(history.size).to eq 17582
+    expect(history.size).to be > 17582
     expect(history.first.rootSymbol).to eq 'XBT'
     expect(history.first.currency).to eq 'XBt'
     expect(history.first.turnover).to eq 0

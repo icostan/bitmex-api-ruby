@@ -19,7 +19,7 @@ RSpec.describe Bitmex::Position do
   end
 
   it '#leverage' do
-    leverage = rand 100
+    leverage = rand(1..100)
     position = subject.position('XBTUSD').leverage leverage
     expect(position.leverage).to eq leverage
   end

@@ -76,7 +76,7 @@ RSpec.describe Bitmex::User do
 
   it '#wallet' do
     wallet = client.user.wallet
-    expect(wallet.amount).to eq 982444
+    expect(wallet.amount).to be > 900000
   end
 
   it '#wallet_history' do
@@ -87,8 +87,8 @@ RSpec.describe Bitmex::User do
 
   it '#wallet_summary' do
     wallet_summary = client.user.wallet_summary
-    expect(wallet_summary.first.transactType).to eq 'RealisedPNL'
-    expect(wallet_summary.first.amount).to eq -17556
+    expect(wallet_summary.last.transactType).to eq 'Total'
+    expect(wallet_summary.last.amount).to be > 900000
   end
 
   it '#events' do
