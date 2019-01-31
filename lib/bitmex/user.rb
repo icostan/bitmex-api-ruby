@@ -89,10 +89,36 @@ module Bitmex
     end
 
     # Get your user events
+    # @param count [Integer] number of results to fetch
+    # @param startId [Double] cursor for pagination
     # @return [Array] the events
-    def events
-      data = get '', resource: 'userEvent'
+    def events(count: 150, startId: nil)
+      data = get '', resource: 'userEvent', count: count, startId: startId
       data.userEvents
+    end
+
+    # Get your alias on the leaderboard
+    # @return [String] the alias on the leaderboard
+    def nickname
+      data = get 'name', resource: 'leaderboard'
+      data.name
+    end
+
+    # Get all raw executions for your account
+    # @!macro bitmex.filters
+    #   @param filters [Hash] the filters to apply
+    #   @option filters [String] :symbol the instrument symbol
+    #   @option filters [String] :filter generic table filter, send key/value pairs {https://www.bitmex.com/app/restAPI#Timestamp-Filters Timestamp Filters}
+    #   @option filters [String] :columns array of column names to fetch; if omitted, will return all columns.
+    #   @option filters [Double] :count (100) number of results to fetch.
+    #   @option filters [Double] :start Starting point for results.
+    #   @option filters [Boolean] :reverse (false) if true, will sort results newest first.
+    #   @option filters [Datetime, String] :startTime Starting date filter for results.
+    #   @option filters [Datetime, String] :endTime Ending date filter for results
+    # @return [Array] the raw transactions
+    def executions(filters = {})
+      params = filters.merge resource: :execution
+      get '', params
     end
 
     private
@@ -100,7 +126,7 @@ module Bitmex
     def method_missing(m, *args, &ablock)
       if @data.nil?
         get '' do |response|
-          fail response.body unless response.success?
+          raise response.body unless response.success?
 
           @data = Bitmex::Mash.new response
         end
@@ -108,26 +134,26 @@ module Bitmex
       @data.send m
     end
 
-    def put(resource, params, &ablock)
-      path = user_path resource
+    def put(action, params, &ablock)
+      path = user_path action
       client.put path, params: params, auth: true do |response|
         if block_given?
           yield response
         else
-          fail response.body unless response.success?
+          raise response.body unless response.success?
 
           response_to_mash response
         end
       end
     end
 
-    def get(resource, params = {}, &ablock)
-      path = user_path resource, params
+    def get(action, params = {}, &ablock)
+      path = user_path action, params
       client.get path, auth: true do |response|
         if block_given?
           yield response
         else
-          fail response.body unless response.success?
+          raise response.body unless response.success?
 
           response_to_mash response
         end
@@ -149,7 +175,7 @@ module Bitmex
       if ablock
         ablock.yield response
       else
-        fail response.body unless response.success?
+        raise response.body unless response.success?
 
         response_to_mash response
       end

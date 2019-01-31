@@ -14,18 +14,18 @@ RSpec.describe Bitmex::Order do
     it 'with websocket api'
   end
 
-  it '#update' do
-    qty = rand(100..120)
-    order = client.order(orderID: '0355e5a9-c779-c804-898f-dfd54272292b').update orderQty: qty
-    expect(order.orderQty).to eq qty
-  end
-
-  it 'create and cancel' do
+  it 'create, update, delete' do
     id = rand(1000..9999)
     order = client.orders.create 'XBTUSD', orderQty: 100, price: 1000, clOrdID: id
     expect(order.ordStatus).to eq 'New'
     expect(order.orderQty).to eq 100
     expect(order.price).to eq 1000
+
+    sleep 1
+
+    qty = rand(100..120)
+    order = client.order(clOrdID: order.clOrdID).update orderQty: qty
+    expect(order.orderQty).to eq qty
 
     sleep 1
 

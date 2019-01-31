@@ -92,8 +92,22 @@ RSpec.describe Bitmex::User do
   end
 
   it '#events' do
-    events = client.user.events
-    expect(events.size).to be >= 1
+    events = client.user.events count: 5
+    expect(events.size).to eq 5
     expect(events.first.userId).to eq 173686
+  end
+
+  it '#alias' do
+    nickname = client.user.nickname
+    expect(nickname).to eq 'Narrow-Pale-Back'
+  end
+
+  describe '#executions' do
+    it 'with rest api' do
+      # executions = client.user.executions filter: { execType: ['Settlement', 'Trade'] }
+      executions = client.user.executions count: 5
+      expect(executions.size).to eq 5
+    end
+    it 'with websocket api'
   end
 end

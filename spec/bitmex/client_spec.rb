@@ -1,68 +1,51 @@
 require 'spec_helper'
 
 RSpec.describe Bitmex::Client do
-  subject { Bitmex::Client.new testnet: true, api_key: ENV['API_KEY'], api_secret: ENV['API_SECRET'] }
+  let(:client) { Bitmex::Client.new testnet: true, api_key: ENV['API_KEY'], api_secret: ENV['API_SECRET'] }
 
   it '#announcement' do
-    expect(subject.announcement).to be_kind_of Array
-    expect(subject.announcement type: :urgent).to be_kind_of Array
+    announcements = client.announcements
+    expect(announcements.first.title).not_to be_nil
   end
 
-  it '#apikey' do
-    expect(subject.apikey.first['name']).to eq 'bitmex-api-ruby'
-  end
-
-  it '#chat' do
-    expect(subject.chat).to be_kind_of Array
-  end
-
-  describe '#execution' do
-    it 'default' do
-      orders = subject.execution
-      expect(orders.size).to be >= 5
+  describe '#funding' do
+    it 'with rest api' do
+      funding = client.funding symbol: 'XBTUSD', count: 5
+      expect(funding.size).to eq 5
+      expect(funding.first.symbol).to eq 'XBTUSD'
+      expect(funding.first.fundingRate).to eq 0.0005
+      expect(funding.first.fundingRateDaily).to eq 0.0005
     end
-    it 'tradehistory' do
-      orders = subject.execution type: :tradehistory
-      expect(orders.size).to be >= 1
+    it 'with websocket api'
+  end
+
+  describe '#insurance' do
+    it 'with rest api' do
+      insurance = client.insurance count: 10
+      expect(insurance.size).to eq 10
+      expect(insurance.first.currency).to eq 'XBt'
+      expect(insurance.first.walletBalance).to be >= 5103298681
     end
-  end
-
-  it '#funding' do
-    expect(subject.funding).to be_kind_of Array
-  end
-
-  xit '#global_notification' do
-    expect(subject.global_notification).to be_kind_of Array
-  end
-
-  it '#instrument' do
-    instruments = subject.instrument
-    instrument = instruments.first
-    expect(instrument).to be_a Bitmex::Mash
-    expect(instrument.rootSymbol).to include 'XBT'
-
-    instruments = subject.instrument type: :active
-    expect(instruments).to be_kind_of Array
-
-    expect { subject.instrument(type: :bad) }.to raise_error ArgumentError
-  end
-
-  it '#insurance' do
-    expect(subject.insurance).to be_kind_of Array
+    it 'with websocket api'
   end
 
   it '#leaderboard' do
-    leaders = subject.leaderboard
+    leaders = client.leaderboard
     expect(leaders.size).to eq 25
+    expect(leaders.first.name).to eq 'yoshi'
   end
 
-  it '#liquidation' do
-    expect(subject.liquidation).to be_kind_of Array
+  describe '#liquidations' do
+    it 'with rest api' do
+      liquidations = client.liquidations
+      expect(liquidations.size).to be >= 0
+    end
+    it 'with websocket api'
   end
 
   describe '#orderbook' do
     it 'with rest api' do
-      orderbook = subject.orderbook 'XBTUSD', depth: 1
+      orderbook = client.orderbook 'XBTUSD', depth: 1
       expect(orderbook.size).to eq 2
       expect(orderbook.first.symbol).to eq 'XBTUSD'
       expect(orderbook.first.side).to eq 'Sell'
@@ -72,14 +55,14 @@ RSpec.describe Bitmex::Client do
   end
 
   it '#schema' do
-    schema = subject.schema
+    schema = client.schema
     expect(schema).to be_kind_of Hash
     expect(schema['Affiliate']['keys']).to eq ['account', 'currency']
   end
 
   describe '#settlement' do
     it 'with rest api' do
-      settlement = subject.settlement
+      settlement = client.settlement
       expect(settlement).to be_kind_of Array
       expect(settlement.first.symbol).to eq 'XBU24H'
       expect(settlement.first.settlementType).to eq 'Settlement'
@@ -90,17 +73,17 @@ RSpec.describe Bitmex::Client do
 
   describe '#listen' do
     it 'to single topic' do
-      subject.listen trade: 'XBTUSD' do |trade|
+      client.listen trade: 'XBTUSD' do |trade|
         # puts trade
         expect(trade.symbol).to eq 'XBTUSD'
-        subject.stop
+        client.stop
       end
     end
     it 'to multiple topics' do
-      subject.listen instrument: 'XBTUSD' do |data|
+      client.listen instrument: 'XBTUSD' do |data|
         # puts data
         expect(data.symbol).to eq 'XBTUSD' if data.topic == 'instrument'
-        subject.stop
+        client.stop
       end
     end
   end

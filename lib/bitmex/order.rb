@@ -12,15 +12,6 @@ module Bitmex
 
     # Get your orders
     # @!macro bitmex.filters
-    #   @param filters [Hash] the filters to apply
-    #   @option filters [String] :symbol the instrument symbol
-    #   @option filters [String] :filter generic table filter, send key/value pairs {https://www.bitmex.com/app/restAPI#Timestamp-Filters Timestamp Filters}
-    #   @option filters [String] :columns array of column names to fetch; if omitted, will return all columns
-    #   @option filters [Double] :count (100) number of results to fetch
-    #   @option filters [Double] :start Starting point for results
-    #   @option filters [Boolean] :reverse (false) if true, will sort results newest first
-    #   @option filters [Datetime, String] :startTime Starting date filter for results
-    #   @option filters [Datetime, String] :endTime Ending date filter for results
     # @return [Array] the orders
     def all(filters = {})
       client.get order_path, params: filters, auth: true do |response|

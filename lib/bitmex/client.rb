@@ -8,20 +8,6 @@ module Bitmex
     include HTTParty
     # logger ::Logger.new(STDOUT), :debug, :curl
 
-    ANNOUNCEMENT_ARGS = %w(urgent).freeze
-    APIKEY_ARGS = %w().freeze
-    CHAT_ARGS = %w(channels connected).freeze
-    EXECUTION_ARGS = %w(tradehistory).freeze
-    FUNDING_ARGS = %w().freeze
-    GLOBALNOTIFICATION_ARGS = %w().freeze
-    INSTRUMENT_ARGS = %w(active activeandindices activeintervals compositeindex indices).freeze
-    INSURANCE_ARGS = %w().freeze
-    LEADERBOARD_ARGS = %w().freeze
-    LIQUIDATION_ARGS = %w().freeze
-
-    TESTNET_HOST = 'testnet.bitmex.com'.freeze
-    MAINNET_HOST = 'www.bitmex.com'.freeze
-
     AUTHORIZATIONS = %w(apikey execution position globalnotification order leaderboard quote user userevent)
 
     attr_reader :host, :api_key, :api_secret
@@ -30,6 +16,68 @@ module Bitmex
       @host = testnet ? TESTNET_HOST : MAINNET_HOST
       @api_key = api_key
       @api_secret = api_secret
+    end
+
+    # Get site announcements
+    # @return [Array] the public announcements
+    def announcements
+      get base_path(:announcement) do |response|
+        response_handler response
+      end
+    end
+
+    # Persistent API Keys for Developers
+    # @return [Bitmex::Apikey] the apikey instance
+    def apikey(api_key = nil)
+      Bitmex::Apikey.new self, api_key
+    end
+
+    # Trollbox Data
+    # @return [Bitmex::Chat] the chat instance
+    def chat
+      Bitmex::Chat.new self
+    end
+
+    # Tradeable Contracts, Indices, and History
+    # @return [Bitmex::Instrument] the instrument model
+    def instrument
+      Bitmex::Instrument.new self
+    end
+
+    # Get funding history
+    # @!macro bitmex.filters
+    # @return [Array] the history
+    def funding(filters = {})
+      get base_path(:funding), params: filters do |response|
+        response_handler response
+      end
+    end
+
+    # Get insurance fund history
+    # @!macro bitmex.filters
+    # @return [Array] the history
+    def insurance(filters = {})
+      get base_path(:insurance), params: filters do |response|
+        response_handler response
+      end
+    end
+
+    # Get current leaderboard
+    # @param ranking [notional ROE] the ranking type
+    # @return [Array] current leaders
+    def leaderboard(ranking = 'notional')
+      get base_path(:leaderboard), params: { method: ranking } do |response|
+        response_handler response
+      end
+    end
+
+    # Get liquidation orders
+    # @!macro bitmex.filters
+    # @return [Array] the liquidations
+    def liquidations(filters = {})
+      get base_path(:liquidation), params: filters do |response|
+        response_handler response
+      end
     end
 
     # Order Placement, Cancellation, Amending, and History

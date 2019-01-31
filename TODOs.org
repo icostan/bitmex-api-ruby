@@ -9,7 +9,6 @@
    DEADLINE: <2019-01-25 Fri>
 ** move from rspec to minitest
 ** configure autorun
-** TODO post/put rest-api endpoints
 ** hearbeat, ping/pong
 ** DONE implement user actions get/put/post
    CLOSED: [2019-01-22 Tue] SCHEDULED: <2019-01-17 Thu>
@@ -20,4 +19,6 @@
 ** DONE orderbook, order resource
    CLOSED: [2019-01-29 Tue] SCHEDULED: <2019-01-29 Tue>
 ** refactoring: use class methods when working with multiple entities
-** issue: fix filter all open order scenario
+** issue: {"error":{"message":"Signature not valid.","name":"HTTPError"}} in user#executions
+** DONE liquidation, leaderboard, insurance, instrument, funding, execution, chat, apikey, announcement
+   CLOSED: [2019-01-30 Wed] SCHEDULED: <2019-01-30 Wed>
