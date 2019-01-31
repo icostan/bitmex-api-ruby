@@ -4,7 +4,7 @@ module Bitmex
   class Chat < Base
     # Get chat messages
     # @example Get last 10 messages for channel 1
-    #   messages = client.chat.messages channelID: 1, count: 10, reverse: true
+    #   messages = client.chat.messages channel_id: 1, count: 10, reverse: true
     # @param options [Hash] options to filter by
     # @option options [Integer] :count (100) number of results to fetch.
     # @option options [Integer] :start starting ID for results
@@ -12,7 +12,11 @@ module Bitmex
     # @option options [Integer] :channelID Channel id. GET /chat/channels for ids. Leave blank for all.
     # @return [Array] the messages
     def messages(options = { count: 100, reverse: true })
-      client.get chat_path, params: options do |response|
+      params = {
+        count: options[:count], start: options[:start],
+        reverse: options[:reverse], channelID: options[:channel_id]
+      }
+      client.get chat_path, params: params do |response|
         response_handler response
       end
     end
@@ -35,7 +39,8 @@ module Bitmex
 
     # Send a chat message
     # @param message [String] the message to send
-    # @param channel_id [Integer] Channel to post to. Default 1 (English)
+    # @param options [Hash] filter options
+    # @option options [Integer] :channel_id (1) channel to post to
     def send(message, options = { channel_id: 1 })
       params = { message: message, channelID: options[:channel_id] }
       client.post chat_path, params: params do |response|

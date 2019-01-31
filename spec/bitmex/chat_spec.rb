@@ -5,7 +5,7 @@ RSpec.describe Bitmex::Chat do
 
   describe '#messages' do
     it 'with rest api' do
-      messages = client.chat.messages channelID: 1, count: 10, reverse: true
+      messages = client.chat.messages channel_id: 1, count: 10, reverse: true
       expect(messages.size).to eq 10
       expect(messages.first.channelID).to eq 1
       expect(messages.first.message).not_to be_nil
@@ -20,10 +20,13 @@ RSpec.describe Bitmex::Chat do
     expect(channels.first.name).to eq 'English'
   end
 
-  it '#stats' do
-    stats = client.chat.stats
-    expect(stats.users).to be > 0
-    expect(stats.bots).to be > 0
+  describe '#stats' do
+    it 'with rest api' do
+      stats = client.chat.stats
+      expect(stats.users).to be > 0
+      expect(stats.bots).to be > 0
+    end
+    it 'with websocket api'
   end
 
   xit '#send' do
