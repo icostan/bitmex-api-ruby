@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    bitmex-api (0.0.2)
+    bitmex-api (0.0.3)
       eventmachine
       faye-websocket
       hashie
