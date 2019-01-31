@@ -1,11 +1,12 @@
-# Bitmex
+# Bitmex API
 
 [![Build Status](https://travis-ci.org/icostan/bitmex-api-ruby.svg?branch=master)](https://travis-ci.org/icostan/bitmex-api-ruby)
 [![Maintainability](https://api.codeclimate.com/v1/badges/85c3eb58ef31dabc9159/maintainability)](https://codeclimate.com/github/icostan/bitmex-api-ruby/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/85c3eb58ef31dabc9159/test_coverage)](https://codeclimate.com/github/icostan/bitmex-api-ruby/test_coverage)
 [![Gem Version](https://badge.fury.io/rb/bitmex-api.svg)](https://badge.fury.io/rb/bitmex-api)
+[![Inline docs](http://inch-ci.org/github/icostan/bitmex-api-ruby.svg?branch=master)](http://inch-ci.org/github/icostan/bitmex-api-ruby)
 
-Idiomatic Ruby library for [BitMEX API](https://www.bitmex.com/app/apiOverview).
+Fully featured, idiomatic Ruby library for [BitMEX API](https://www.bitmex.com/app/apiOverview).
 
 ## Installation
 
@@ -32,42 +33,130 @@ require 'bitmex-api'
 
 client = Bitmex::Client.new
 
-# or add key and secret args if you want to access private API
+# or add key and secret args if you want to access private APIs
 client = Bitmex::Client.new api_key: 'KEY', api_secret: 'SECRET'
 ```
 
-### Trades
+### REST and Websocket API
 
 #### Using REST API
 
-Load first 15 trades after Jan 1st for XBTUSD.
+Get last 10 messages in English channel:
 
 ```ruby
-trades = client.trade symbol: 'XBTUSD', count: 15, startTime: '2019-01-01'
-trades.size
-trades.first
+messages = client.chat.messages channel_id: 1, count: 10, reverse: true
+puts messages.first.name
 ```
 
 #### Using Websocket API
 
-Listen for new trades and print the ones greater than 10 XBT.
+Generic Websocket API is implemented in `Bitmex::Client#listen` method. See the list of available [Topics](https://www.bitmex.com/app/wsAPI#Subscriptions "Topics") to subscribe to.
+
+Listen to chat messages.
 
 ```ruby
-client.listen trade: 'XBTUSD' do |trade|
-  puts trade if trade.homeNotional > 10
-
-  # when done call client.stop
-  # client.stop
+client.listen chat: 1 do |message|
+  puts "#{message.user}: #{message.message}"
 end
 ```
 
-### Account operations
-
-Fetch user's preferences, wallet, history, events and much more.
+Listen to XBTUSD trades.
 
 ```ruby
+client.listen trade: 'XBTUSD' do |trade|
+  puts trade.homeNotional
+end
+```
 
-user = client.user
+Or multiple topics at the same time.
+
+```ruby
+client.listen liquidation: 'XBTUSD', trade: 'XBTUSD' do |data|
+  puts data
+end
+```
+
+### API Endpoints
+
+#### Leaderboard
+
+See the rock stars.
+
+```ruby
+leaders = client.leaderboard
+puts leaders.first.name
+```
+
+#### Order
+
+Get your orders.
+
+```ruby
+orders = client.orders.all
+puts orders.size
+```
+
+Create new order, update and cancel.
+
+```ruby
+order = client.orders.create 'XBTUSD', orderQty: 100, price: 1000, clOrdID: 'YOUR_ID'
+order = client.order(clOrdID: order.clOrdID).update orderQty: qty
+order = client.order(clOrdID: order.clOrdID).cancel
+```
+
+#### Orderbook
+
+Get first bid and ask.
+
+```ruby
+orderbook = client.orderbook 'XBTUSD', depth: 1
+puts orderbook.first.side
+```
+
+#### Position
+
+Get all open positions or change leverage for an open position.
+
+```ruby
+positions = client.positions
+puts positions.size
+
+position = client.position('XBTUSD').leverage 25
+puts position.leverage
+```
+
+#### Stats
+
+Exchange statistics.
+
+```ruby
+history = subject.stats.history
+puts history
+```
+
+#### Trade
+
+Load first 15 trades after Jan 1st for XBTUSD.
+
+```ruby
+trades = client.trades.all symbol: 'XBTUSD', startTime: '2019-01-01', count: 10
+puts trades.first
+```
+
+Listen for new trades and print the ones greater than 10 XBT.
+
+```ruby
+client.trades.all symbol: product do |trade|
+  puts "#{trade.side} #{trade.homeNotional} #{trade.symbol} @ #{trade.price}" if trade.homeNotional > 10
+end
+```
+
+#### User
+
+Fetch user's preferences, wallet, history, events, executions and much more.
+
+```ruby
+user = client.user.firstname
 puts user.firstname
 
 wallet = client.user.wallet

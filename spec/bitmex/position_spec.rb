@@ -8,7 +8,7 @@ RSpec.describe Bitmex::Position do
       positions = client.positions
       expect(positions.size).to eq 1
       expect(positions.first.symbol).to eq 'XBTUSD'
-      expect(positions.first.execQty).to eq -100
+      expect(positions.first.currentQty).to eq -100
     end
     it 'with websocket api'
   end
