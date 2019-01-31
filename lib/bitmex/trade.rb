@@ -7,9 +7,15 @@ module Bitmex
     #   client.trades.all symbol: 'XBTUSD', startTime: '2019-01-01', count: 10
     # @!macro bitmex.filters
     # @return [Array] the trades
-    def all(filters = {})
-      client.get trades_path, params: filters do |response|
-        response_handler response
+    # @yield [trade] the trade
+    def all(filters = {}, &callback)
+      if block_given?
+        # TODO: investigate eventmachine + faye
+        EM.run { client.websocket.subscribe :trade, filters[:symbol], &callback }
+      else
+        client.get trade_path, params: filters do |response|
+          response_handler response
+        end
       end
     end
 
@@ -21,14 +27,14 @@ module Bitmex
     # @return [Array] the trades by bucket
     def bucketed(binSize = '1h', filters = {})
       params = filters.merge binSize: binSize
-      client.get trades_path(:bucketed), params: params do |response|
+      client.get trade_path(:bucketed), params: params do |response|
         response_handler response
       end
     end
 
     private
 
-    def trades_path(action = '')
+    def trade_path(action = '')
       base_path :trade, action
     end
   end

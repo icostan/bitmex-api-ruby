@@ -12,6 +12,10 @@ module Bitmex
 
     attr_reader :host, :api_key, :api_secret
 
+    # Create new client instance
+    # @param testnet [Boolean] true for testnet network
+    # @param api_key [String] the api key
+    # @param api_secret [String] the api secret
     def initialize(testnet: false, api_key: nil, api_secret: nil)
       @host = testnet ? TESTNET_HOST : MAINNET_HOST
       @api_key = api_key
@@ -163,44 +167,13 @@ module Bitmex
       Bitmex::User.new self
     end
 
-    # TODO: move into WS client
-    #
-    # WebSocket API
-    #
-    # https://www.bitmex.com/app/wsAPI
-    #
-    def listen(options, &ablock)
+    # Listen to generic topics
+    # @param topics [Hash] topics to listen to e.g. { trade: "XBTUSD" }
+    # @yield [data] data pushed via websocket
+    def listen(topics, &ablock)
       EM.run do
-        ws = Faye::WebSocket::Client.new realtime_url
-
-        topics = options.map{ |key, value| "#{key}:#{value}"}
-        subscription = { op: :subscribe, args: topics }
-        # puts subscription
-
-        ws.on :open do |event|
-          ws.send subscription.to_json.to_s
-        end
-
-        ws.on :message do |event|
-          json = JSON.parse event.data
-          data = json['data']
-
-          data&.each do |payload|
-            if block_given?
-              yield Bitmex::Mash.new(payload.merge topic: json['table'])
-            else
-              p value
-            end
-          end
-        end
-
-        ws.on :error do |event|
-          raise [:error, event.data]
-        end
-
-        ws.on :close do |event|
-          # p [:close, event.reason]
-          ws = nil
+        topics.each do |topic, symbol|
+          websocket.subscribe topic, symbol, &ablock
         end
       end
     end
@@ -210,6 +183,10 @@ module Bitmex
     #
     def stop
       EM.stop_event_loop
+    end
+
+    def websocket
+      @websocket ||= Websocket.new realtime_url
     end
 
     # TODO: move these methods into rest client

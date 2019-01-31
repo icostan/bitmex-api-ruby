@@ -80,9 +80,9 @@ RSpec.describe Bitmex::Client do
       end
     end
     it 'to multiple topics' do
-      client.listen instrument: 'XBTUSD' do |data|
+      client.listen instrument: 'XBTUSD', trade: 'XBTUSD' do |data|
         # puts data
-        expect(data.symbol).to eq 'XBTUSD' if data.topic == 'instrument'
+        expect(data.symbol).to eq 'XBTUSD'
         client.stop
       end
     end

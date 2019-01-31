@@ -8,6 +8,6 @@ limit = (ARGV[1] || 10).to_i
 puts "==> Filter trades > #{limit} #{product}"
 
 client = Bitmex::Client.new
-client.listen trade: product do |trade|
-  puts trade if trade.homeNotional > limit
+client.trades.all symbol: product do |trade|
+  puts "#{trade.side} #{trade.homeNotional} #{trade.symbol} @ #{trade.price}" if trade.homeNotional > limit
 end

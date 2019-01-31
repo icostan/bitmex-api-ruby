@@ -15,6 +15,7 @@ require 'bitmex/order'
 require 'bitmex/instrument'
 require 'bitmex/user'
 require 'bitmex/apikey'
+require 'bitmex/websocket'
 
 # Bitmex module
 module Bitmex
