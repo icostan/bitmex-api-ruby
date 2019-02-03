@@ -186,14 +186,14 @@ module Bitmex
     end
 
     def websocket
-      @websocket ||= Websocket.new realtime_url
+      @websocket ||= Websocket.new realtime_url, self
     end
 
     # TODO: move these methods into rest client
     def get(path, params: {}, auth: false, &ablock)
       options = {}
       options[:query] = params unless params.empty?
-      options[:headers] = headers 'GET', path, '' if auth
+      options[:headers] = rest_headers 'GET', path, '' if auth
 
       response = self.class.get "#{domain_url}#{path}", options
       yield response
@@ -204,7 +204,7 @@ module Bitmex
 
       options = {}
       options[:body] = body
-      options[:headers] = headers 'PUT', path, body, json: json if auth
+      options[:headers] = rest_headers 'PUT', path, body, json: json if auth
 
       response = self.class.put "#{domain_url}#{path}", options
       yield response
@@ -215,7 +215,7 @@ module Bitmex
 
       options = {}
       options[:body] = body
-      options[:headers] = headers 'POST', path, body, json: json if auth
+      options[:headers] = rest_headers 'POST', path, body, json: json if auth
 
       response = self.class.post "#{domain_url}#{path}", options
       yield response
@@ -226,7 +226,7 @@ module Bitmex
 
       options = {}
       options[:body] = body
-      options[:headers] = headers 'DELETE', path, body, json: json if auth
+      options[:headers] = rest_headers 'DELETE', path, body, json: json if auth
 
       response = self.class.delete "#{domain_url}#{path}", options
       yield response
@@ -244,6 +244,17 @@ module Bitmex
       else
         Bitmex::Mash.new response
       end
+    end
+
+    def headers(verb, path, body)
+      return {} unless api_key || api_secret
+
+      expires = Time.now.utc.to_i + 60
+      {
+        'api-expires' => expires.to_s,
+        'api-key' => api_key,
+        'api-signature' => Bitmex.signature(api_secret, verb, path, expires, body)
+      }
     end
 
     private
@@ -280,22 +291,16 @@ module Bitmex
       params = nil if params&.empty?
 
       options = { query: params }
-      options[:headers] = headers 'GET', path, '' if auth
+      options[:headers] = rest_headers 'GET', path, '' if auth
 
       response = self.class.get url, options
-      fail response.body unless response.success?
+      raise response.body unless response.success?
+
       yield response
     end
 
-    def headers(verb, path, body, json: true)
-      raise 'api_key and api_secret are required' unless api_key || api_secret
-
-      expires = Time.now.utc.to_i + 60
-      headers = {
-        'api-expires' => expires.to_s,
-        'api-key' => api_key,
-        'api-signature' => Bitmex.signature(api_secret, verb, path, expires, body)
-      }
+    def rest_headers(verb, path, body, json: true)
+      headers = headers verb, path, body
       if json
         headers['Content-Type'] = 'application/json'
       else
@@ -306,7 +311,8 @@ module Bitmex
 
     def check!(type, types)
       return true if type.nil? or type == ''
-      raise ArgumentError, "invalid argument #{type}, only #{types} are supported" if !types.include?(type.to_s)
+
+      raise ArgumentError, "invalid argument #{type}, only #{types} are supported" unless types.include?(type.to_s)
     end
 
     def rest_url

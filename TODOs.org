@@ -5,7 +5,8 @@
    CLOSED: [2019-01-14] SCHEDULED: <2019-01-14 Fri>
 ** DONE auth for REST-API endpoints
    CLOSED: [2019-01-16 Wed] SCHEDULED: <2019-01-15 Tue> DEADLINE: <2019-01-16 Wed>
-** TODO auth for private subscription topics
+** DONE auth for private subscription topics
+   CLOSED: [2019-02-01 Fri] SCHEDULED: <2019-02-01 Fri>
 ** move from rspec to minitest
 ** configure autorun
 ** hearbeat, ping/pong

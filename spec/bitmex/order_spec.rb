@@ -11,7 +11,13 @@ RSpec.describe Bitmex::Order do
       expect(orders.first.orderQty).to eq 100
       expect(orders.first.side).to eq 'Sell'
     end
-    it 'with websocket api'
+    it 'with websocket api' do
+      client.listen order: nil do |data|
+        expect(data.symbol).to eq 'XBTUSD'
+        expect(data.price).to eq 2000
+        client.stop
+      end
+    end
   end
 
   it 'create, update, delete' do

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 RSpec.describe Bitmex::Trade do
-  let(:client) { Bitmex::Client.new testnet: true, api_key: ENV['API_KEY'], api_secret: ENV['API_SECRET'] }
+  let(:client) { Bitmex::Client.new testnet: true }
 
   describe '#all' do
     it 'with rest api' do
