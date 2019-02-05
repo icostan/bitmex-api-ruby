@@ -3,8 +3,11 @@
 [![Build Status](https://travis-ci.org/icostan/bitmex-api-ruby.svg?branch=master)](https://travis-ci.org/icostan/bitmex-api-ruby)
 [![Maintainability](https://api.codeclimate.com/v1/badges/85c3eb58ef31dabc9159/maintainability)](https://codeclimate.com/github/icostan/bitmex-api-ruby/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/85c3eb58ef31dabc9159/test_coverage)](https://codeclimate.com/github/icostan/bitmex-api-ruby/test_coverage)
-[![Gem Version](https://badge.fury.io/rb/bitmex-api.svg)](https://badge.fury.io/rb/bitmex-api)
 [![Inline docs](http://inch-ci.org/github/icostan/bitmex-api-ruby.svg?branch=master)](http://inch-ci.org/github/icostan/bitmex-api-ruby)
+|
+[![Gem Version](https://badge.fury.io/rb/bitmex-api.svg)](https://badge.fury.io/rb/bitmex-api)
+[![Yard Docs](https://img.shields.io/badge/yard-docs-blue.svg)](https://www.rubydoc.info/gems/bitmex-api)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/icostan/bitmex-api-ruby/blob/master/LICENSE)
 
 Fully featured, idiomatic Ruby library for [BitMEX API](https://www.bitmex.com/app/apiOverview).
 
