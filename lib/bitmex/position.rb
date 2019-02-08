@@ -5,17 +5,17 @@ module Bitmex
     attr_reader :symbol
 
     # A new instance of Position
-    # @param client [Bitmex::Client] the HTTP client
+    # @param rest [Bitmex::Rest] the HTTP rest
     # @param symbol [String] the symbol of the underlying position
-    def initialize(client, symbol = 'XBTUSD')
-      super client
+    def initialize(rest, symbol = 'XBTUSD')
+      super rest
       @symbol = symbol
     end
 
     # Get your positions
     # @return [Array] the list of positions
     def all
-      client.get position_path, auth: true do |response|
+      rest.get position_path, auth: true do |response|
         response_handler response
       end
     end
@@ -26,7 +26,7 @@ module Bitmex
     def isolate(enabled: true)
       path = position_path(:isolate)
       params = { symbol: symbol, enabled: enabled }
-      client.post path, params: params do |response|
+      rest.post path, params: params do |response|
         response_handler response
       end
     end
@@ -39,7 +39,7 @@ module Bitmex
 
       path = position_path(:leverage)
       params = { symbol: symbol, leverage: leverage }
-      client.post path, params: params do |response|
+      rest.post path, params: params do |response|
         response_handler response
       end
     end
@@ -50,7 +50,7 @@ module Bitmex
     def risk_limit(risk_limit)
       path = position_path(:riskLimit)
       params = { symbol: symbol, riskLimit: risk_limit }
-      client.post path, params: params do |response|
+      rest.post path, params: params do |response|
         response_handler response
       end
     end
@@ -63,7 +63,7 @@ module Bitmex
     def transfer_margin(amount)
       path = position_path(:transferMargin)
       params = { symbol: symbol, amount: amount }
-      client.post path, params: params do |response|
+      rest.post path, params: params do |response|
         response_handler response
       end
     end
@@ -71,7 +71,7 @@ module Bitmex
     private
 
     def position_path(action = '')
-      client.base_path :position, action
+      rest.base_path :position, action
     end
   end
 end

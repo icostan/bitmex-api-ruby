@@ -16,6 +16,7 @@ require 'bitmex/instrument'
 require 'bitmex/user'
 require 'bitmex/apikey'
 require 'bitmex/websocket'
+require 'bitmex/rest'
 
 # Bitmex module
 module Bitmex
@@ -30,5 +31,16 @@ module Bitmex
 
     data = verb + path + expires.to_s + params
     OpenSSL::HMAC.hexdigest 'SHA256', api_secret, data
+  end
+
+  def self.headers(api_key, api_secret, verb, path, body)
+    return {} unless api_key || api_secret
+
+    expires = Time.now.utc.to_i + 60
+    {
+      'api-expires' => expires.to_s,
+      'api-key' => api_key,
+      'api-signature' => Bitmex.signature(api_secret, verb, path, expires, body)
+    }
   end
 end

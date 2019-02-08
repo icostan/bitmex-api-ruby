@@ -12,24 +12,24 @@ RSpec.describe Bitmex::Order do
       expect(orders.first.side).to eq 'Sell'
     end
     it 'with websocket api' do
-      client.listen order: nil do |data|
+      client.websocket.listen order: nil do |data|
         expect(data.symbol).to eq 'XBTUSD'
-        expect(data.price).to eq 2000
-        client.stop
+        expect(data.price).to be >= 4000
+        client.websocket.stop
       end
     end
   end
 
   it 'create, update, delete' do
     id = rand(1000..9999)
-    order = client.orders.create 'XBTUSD', orderQty: 100, price: 1000, clOrdID: id
+    order = client.orders.create 'XBTUSD', side: 'Sell', orderQty: 10, price: 4000, clOrdID: id
     expect(order.ordStatus).to eq 'New'
-    expect(order.orderQty).to eq 100
-    expect(order.price).to eq 1000
+    expect(order.orderQty).to eq 10
+    expect(order.price).to eq 4000
 
     sleep 1
 
-    qty = rand(100..120)
+    qty = rand(10..50)
     order = client.order(clOrdID: order.clOrdID).update orderQty: qty
     expect(order.orderQty).to eq qty
 

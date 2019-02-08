@@ -24,3 +24,5 @@
    CLOSED: [2019-01-30 Wed] SCHEDULED: <2019-01-30 Wed>
 ** DONE refactoring: extract websocket common logic
    CLOSED: [2019-01-31 Thu] SCHEDULED: <2019-01-31 Thu>
+** DONE refactoring: extract REST API implemenration
+   CLOSED: [2019-02-08 Fri] SCHEDULED: <2019-02-08 Fri>

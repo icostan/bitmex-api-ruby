@@ -6,7 +6,7 @@ module Bitmex
     # @!macro bitmex.filters
     # @return [Array] all instruments
     def all(filters = {})
-      client.get instrument_path, params: filters do |response|
+      rest.get instrument_path, params: filters do |response|
         response_handler response
       end
     end
@@ -14,7 +14,7 @@ module Bitmex
     # Get all active instruments and instruments that have expired in <24hrs.
     # @return [Array] active instruments
     def active
-      client.get instrument_path('active') do |response|
+      rest.get instrument_path('active') do |response|
         response_handler response
       end
     end
@@ -22,7 +22,7 @@ module Bitmex
     # Return all active contract series and interval pairs
     # @return [Bitmex::Mash] active intervals and symbols
     def intervals
-      client.get instrument_path('activeIntervals') do |response|
+      rest.get instrument_path('activeIntervals') do |response|
         response_handler response
       end
     end
@@ -31,7 +31,7 @@ module Bitmex
     # @!macro bitmex.filters
     # @return [Array] the parts of an index
     def composite_index(filters = { symbol: '.XBT' })
-      client.get instrument_path('compositeIndex'), params: filters do |response|
+      rest.get instrument_path('compositeIndex'), params: filters do |response|
         response_handler response
       end
     end
@@ -39,7 +39,7 @@ module Bitmex
     # Get all price indices
     # @return [Array] all indices
     def indices
-      client.get instrument_path('indices') do |response|
+      rest.get instrument_path('indices') do |response|
         response_handler response
       end
     end

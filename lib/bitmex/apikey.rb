@@ -5,17 +5,17 @@ module Bitmex
     attr_reader :api_key
 
     # Create new Apikey
-    # @param client [Bitmex::Client] the rest client
+    # @param rest [Bitmex::Rest] the rest client
     # @param api_key [String] public apikey
-    def initialize(client, api_key = nil)
-      super client
+    def initialize(rest, api_key = nil)
+      super rest
       @api_key = api_key
     end
 
     # Get your API Keys
     # @return [Array] the api keys
     def all
-      client.get apikey_path, auth: true do |response|
+      rest.get apikey_path, auth: true do |response|
         response_handler response
       end
     end
@@ -23,7 +23,7 @@ module Bitmex
     # NOT SUPPORTED
     # #return 403 Access Denied
     def enable
-      client.post apikey_path(:enable) do |response|
+      rest.post apikey_path(:enable) do |response|
         response_handler response
       end
     end
@@ -31,7 +31,7 @@ module Bitmex
     # NOT SUPPORTED
     # @return 403 Access Denied
     def disable
-      client.post apikey_path(:disable) do |response|
+      rest.post apikey_path(:disable) do |response|
         response_handler response
       end
     end

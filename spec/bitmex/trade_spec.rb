@@ -17,7 +17,7 @@ RSpec.describe Bitmex::Trade do
       client.trades.all symbol: 'XBTUSD' do |trade|
         expect(trade.symbol).to eq 'XBTUSD'
         expect(trade.foreignNotional).to be >= 1
-        client.stop
+        client.websocket.stop
       end
     end
   end

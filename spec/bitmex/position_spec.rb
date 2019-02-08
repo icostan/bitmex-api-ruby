@@ -8,7 +8,7 @@ RSpec.describe Bitmex::Position do
       positions = client.positions
       expect(positions.size).to eq 1
       expect(positions.first.symbol).to eq 'XBTUSD'
-      expect(positions.first.currentQty).to eq -100
+      expect(positions.first.currentQty).to eq 10
     end
     it 'with websocket api'
   end
@@ -31,8 +31,8 @@ RSpec.describe Bitmex::Position do
   end
 
   it '#transfer_margin' do
-    margin = 100
+    margin = 10_000
     position = client.position('XBTUSD').transfer_margin margin
-    expect(position.maintMargin).to be > 40_000
+    expect(position.maintMargin).to be > 10_000
   end
 end

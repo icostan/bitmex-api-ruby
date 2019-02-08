@@ -6,11 +6,11 @@ module Bitmex
   #
   # @author Iulian Costan
   class User
-    attr_reader :client
+    attr_reader :rest
 
-    # @param client [Bitmex::Client] the HTTP client
-    def initialize(client)
-      @client = client
+    # @param rest [Bitmex::Rest] the HTTP client
+    def initialize(rest)
+      @rest = rest
     end
 
     # Get your current affiliate/referral status.
@@ -41,7 +41,7 @@ module Bitmex
     # @return [String] the address
     def deposit_address(currency = 'XBt')
       get 'depositAddress', currency: currency do |response|
-        fail response.body unless response.success?
+        raise response.body unless response.success?
 
         response.to_s
       end
@@ -123,40 +123,22 @@ module Bitmex
 
     private
 
-    def method_missing(m, *args, &ablock)
-      if @data.nil?
-        get '' do |response|
-          raise response.body unless response.success?
-
-          @data = Bitmex::Mash.new response
-        end
-      end
-      @data.send m
+    def method_missing(name, *_args, &_ablock)
+      @data = get '' if @data.nil?
+      @data.send name
     end
 
     def put(action, params, &ablock)
       path = user_path action
-      client.put path, params: params, auth: true do |response|
-        if block_given?
-          yield response
-        else
-          raise response.body unless response.success?
-
-          response_to_mash response
-        end
+      rest.put path, params: params, auth: true do |response|
+        response_handler response_handler, &ablock
       end
     end
 
     def get(action, params = {}, &ablock)
       path = user_path action, params
-      client.get path, auth: true do |response|
-        if block_given?
-          yield response
-        else
-          raise response.body unless response.success?
-
-          response_to_mash response
-        end
+      rest.get path, auth: true do |response|
+        response_handler response, &ablock
       end
     end
 
@@ -171,21 +153,11 @@ module Bitmex
       path
     end
 
-    def response_handler(response, ablock)
-      if ablock
+    def response_handler(response, &ablock)
+      if block_given?
         ablock.yield response
       else
-        raise response.body unless response.success?
-
-        response_to_mash response
-      end
-    end
-
-    def response_to_mash(response)
-      if response.parsed_response.is_a? Array
-        response.to_a.map { |s| Bitmex::Mash.new s }
-      else
-        Bitmex::Mash.new response
+        rest.response_handler response
       end
     end
   end

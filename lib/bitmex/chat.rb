@@ -16,7 +16,7 @@ module Bitmex
         count: options[:count], start: options[:start],
         reverse: options[:reverse], channelID: options[:channel_id]
       }
-      client.get chat_path, params: params do |response|
+      rest.get chat_path, params: params do |response|
         response_handler response
       end
     end
@@ -24,7 +24,7 @@ module Bitmex
     # Get available channels
     # @return [Array] the available channels
     def channels
-      client.get chat_path(:channels) do |response|
+      rest.get chat_path(:channels) do |response|
         response_handler response
       end
     end
@@ -32,7 +32,7 @@ module Bitmex
     # Get connected users
     # @return [Bitmex::Mash] an array with browser users in the first position and API users (bots) in the second position.
     def stats
-      client.get chat_path(:connected) do |response|
+      rest.get chat_path(:connected) do |response|
         response_handler response
       end
     end
@@ -43,7 +43,7 @@ module Bitmex
     # @option options [Integer] :channel_id (1) channel to post to
     def send(message, options = { channel_id: 1 })
       params = { message: message, channelID: options[:channel_id] }
-      client.post chat_path, params: params do |response|
+      rest.post chat_path, params: params do |response|
         response_handler response
       end
     end

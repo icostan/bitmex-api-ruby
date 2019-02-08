@@ -73,17 +73,17 @@ RSpec.describe Bitmex::Client do
 
   describe '#listen' do
     it 'to single topic' do
-      client.listen trade: 'XBTUSD' do |trade|
+      client.websocket.listen trade: 'XBTUSD' do |trade|
         # puts trade
         expect(trade.symbol).to eq 'XBTUSD'
-        client.stop
+        client.websocket.stop
       end
     end
     it 'to multiple topics' do
-      client.listen instrument: 'XBTUSD', trade: 'XBTUSD' do |data|
+      client.websocket.listen instrument: 'XBTUSD', trade: 'XBTUSD' do |data|
         # puts data
         expect(data.symbol).to eq 'XBTUSD'
-        client.stop
+        client.websocket.stop
       end
     end
   end

@@ -58,7 +58,7 @@ Generic Websocket API is implemented in `Bitmex::Client#listen` method. See the 
 Listen to chat messages.
 
 ```ruby
-client.listen chat: 1 do |message|
+client.websocket.listen chat: 1 do |message|
   puts "#{message.user}: #{message.message}"
 end
 ```
@@ -66,7 +66,7 @@ end
 Listen to XBTUSD trades.
 
 ```ruby
-client.listen trade: 'XBTUSD' do |trade|
+client.websocket.listen trade: 'XBTUSD' do |trade|
   puts trade.homeNotional
 end
 ```

@@ -7,7 +7,7 @@ module Bitmex
     # @!macro bitmex.filters
     # @return [Array] the quotes
     def all(filters = {})
-      client.get quotes_path, params: filters do |response|
+      rest.get quotes_path, params: filters do |response|
         response_handler response
       end
     end
@@ -18,7 +18,7 @@ module Bitmex
     # @return [Array] the quotes by bucket
     def bucketed(binSize = '1h', filters = {})
       params = filters.merge binSize: binSize
-      client.get quotes_path(:bucketed), params: params do |response|
+      rest.get quotes_path(:bucketed), params: params do |response|
         response_handler response
       end
     end
@@ -26,7 +26,7 @@ module Bitmex
     private
 
     def quotes_path(action = '')
-      client.base_path :quote, action
+      rest.base_path :quote, action
     end
   end
 end

@@ -10,10 +10,9 @@ module Bitmex
     # @yield [trade] the trade
     def all(filters = {}, &callback)
       if block_given?
-        # TODO: investigate eventmachine + faye
-        EM.run { client.websocket.subscribe :trade, filters[:symbol], &callback }
+        websocket.listen trade: filters[:symbol], &callback
       else
-        client.get trade_path, params: filters do |response|
+        rest.get trade_path, params: filters do |response|
           response_handler response
         end
       end
@@ -27,7 +26,7 @@ module Bitmex
     # @return [Array] the trades by bucket
     def bucketed(binSize = '1h', filters = {})
       params = filters.merge binSize: binSize
-      client.get trade_path(:bucketed), params: params do |response|
+      rest.get trade_path(:bucketed), params: params do |response|
         response_handler response
       end
     end
@@ -35,7 +34,7 @@ module Bitmex
     private
 
     def trade_path(action = '')
-      base_path :trade, action
+      rest.base_path :trade, action
     end
   end
 end

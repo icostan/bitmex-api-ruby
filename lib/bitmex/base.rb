@@ -2,17 +2,19 @@ module Bitmex
   # Base class for all Bitmex models
   # @author Iulian Costan
   class Base
-    attr_reader :client
+    attr_reader :rest, :websocket
 
-    # @param client [Bitmex::Client] the client object
-    def initialize(client)
-      @client = client
+    # @param rest [Bitmex::Rest] the rest implementation
+    # @param websocket [Bitmex::Websocket] the websocket implementation
+    def initialize(rest, websocket = nil)
+      @rest = rest
+      @websocket = websocket
     end
 
     protected
 
     def response_handler(response)
-      client.response_handler response
+      rest.response_handler response
     end
 
     def requires!(arg, args)
@@ -20,7 +22,7 @@ module Bitmex
     end
 
     def base_path(resource, action)
-      client.base_path resource, action
+      rest.base_path resource, action
     end
   end
 end

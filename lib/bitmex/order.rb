@@ -4,8 +4,8 @@ module Bitmex
   class Order < Base
     attr_reader :orderID, :clOrdID
 
-    def initialize(client, orderID = nil, clOrdID = nil)
-      super client
+    def initialize(rest, orderID = nil, clOrdID = nil)
+      super rest
       @orderID = orderID
       @clOrdID = clOrdID
     end
@@ -14,7 +14,7 @@ module Bitmex
     # @!macro bitmex.filters
     # @return [Array] the orders
     def all(filters = {})
-      client.get order_path, params: filters, auth: true do |response|
+      rest.get order_path, params: filters, auth: true do |response|
         response_handler response
       end
     end
@@ -30,7 +30,7 @@ module Bitmex
     # @return [Bitmex::Mash] the updated order
     def update(attributes)
       params = attributes.merge orderID: orderID, origClOrdID: clOrdID
-      client.put order_path, params: params do |response|
+      rest.put order_path, params: params do |response|
         response_handler response
       end
     end
@@ -53,7 +53,7 @@ module Bitmex
     # @return [Bitmex::Mash] the created order
     def create(symbol, attributes)
       params = attributes.merge symbol: symbol
-      client.post order_path, params: params do |response|
+      rest.post order_path, params: params do |response|
         response_handler response
       end
     end
@@ -63,7 +63,7 @@ module Bitmex
     # @return [Bitmex::Mash] the canceled order
     def cancel(text = nil)
       params = { orderID: orderID, clOrdID: clOrdID, text: text }
-      client.delete order_path, params: params do |response|
+      rest.delete order_path, params: params do |response|
         # a single order only
         response_handler(response).first
       end
@@ -72,7 +72,7 @@ module Bitmex
     private
 
     def order_path(action = '')
-      client.base_path 'order', action
+      rest.base_path 'order', action
     end
   end
 end

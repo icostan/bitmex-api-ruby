@@ -6,6 +6,6 @@ require 'bitmex'
 puts 'Listening to chat message from English channel...'
 
 client = Bitmex::Client.new
-client.listen chat: 1 do |message|
+client.websocket.listen chat: 1 do |message|
   puts "#{message.user}: #{message.message}"
 end
