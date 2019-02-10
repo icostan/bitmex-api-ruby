@@ -13,11 +13,15 @@ module Bitmex
 
     protected
 
+    def check_binsize(bin_size)
+      raise ArgumentError, 'invalid bin_size' unless %w[1m 5m 1h 1d].include? bin_size.to_s
+    end
+
     def response_handler(response)
       rest.response_handler response
     end
 
-    def requires!(arg, args)
+    def requires(arg, args)
       raise ArgumentError, "argument '#{arg}' is required" unless args.include? arg
     end
 

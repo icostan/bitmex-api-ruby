@@ -12,9 +12,8 @@ RSpec.describe Bitmex::Order do
       expect(orders.first.side).to eq 'Sell'
     end
     it 'with websocket api' do
-      client.websocket.listen order: nil do |data|
+      client.orders.all symbol: 'XBTUSD' do |data|
         expect(data.symbol).to eq 'XBTUSD'
-        expect(data.price).to be >= 4000
         client.websocket.stop
       end
     end

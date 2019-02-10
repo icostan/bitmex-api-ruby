@@ -7,16 +7,25 @@ module Bitmex
     # A new instance of Position
     # @param rest [Bitmex::Rest] the HTTP rest
     # @param symbol [String] the symbol of the underlying position
-    def initialize(rest, symbol = 'XBTUSD')
-      super rest
+    def initialize(rest, websocket, symbol = 'XBTUSD')
+      super rest, websocket
       @symbol = symbol
     end
 
     # Get your positions
+    # @example Get all positions
+    #   positions = client.positions.all
+    # @example Listen for positions changes
+    #   client.positions.all do |position|
+    #     puts position.inspect
+    #   end
     # @return [Array] the list of positions
-    def all
-      rest.get position_path, auth: true do |response|
-        response_handler response
+    # @yield [Hash] the position
+    def all(&ablock)
+      if block_given?
+        websocket.listen position: nil, &ablock
+      else
+        rest.get position_path, auth: true
       end
     end
 

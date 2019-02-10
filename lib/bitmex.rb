@@ -20,7 +20,10 @@ require 'bitmex/rest'
 
 # Bitmex module
 module Bitmex
+  # Bitmex standard error
   class Error < StandardError; end
+  # 403 Forbidden
+  class ForbiddenError < Error; end
 
   TESTNET_HOST = 'testnet.bitmex.com'.freeze
   MAINNET_HOST = 'www.bitmex.com'.freeze

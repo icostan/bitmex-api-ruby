@@ -6,11 +6,13 @@ module Bitmex
   #
   # @author Iulian Costan
   class User
-    attr_reader :rest
+    attr_reader :rest, :websocket
 
     # @param rest [Bitmex::Rest] the HTTP client
-    def initialize(rest)
+    # @param websocket [Bitmex::Websocket] the Websocket client
+    def initialize(rest, websocket)
       @rest = rest
+      @websocket = websocket
     end
 
     # Get your current affiliate/referral status.
@@ -106,8 +108,8 @@ module Bitmex
 
     # Get all raw executions for your account
     # @!macro bitmex.filters
-    #   @param filters [Hash] the filters to apply
-    #   @option filters [String] :symbol the instrument symbol
+    #   @param filters [Hash] the filters to apply to mostly REST API requests with a few exceptions
+    #   @option filters [String] :symbol the instrument symbol, this filter works in both REST and Websocket APIs
     #   @option filters [String] :filter generic table filter, send key/value pairs {https://www.bitmex.com/app/restAPI#Timestamp-Filters Timestamp Filters}
     #   @option filters [String] :columns array of column names to fetch; if omitted, will return all columns.
     #   @option filters [Double] :count (100) number of results to fetch.
@@ -116,9 +118,13 @@ module Bitmex
     #   @option filters [Datetime, String] :startTime Starting date filter for results.
     #   @option filters [Datetime, String] :endTime Ending date filter for results
     # @return [Array] the raw transactions
-    def executions(filters = {})
-      params = filters.merge resource: :execution
-      get '', params
+    # @yield [Hash] the execution
+    def executions(filters = {}, &ablock)
+      if block_given?
+        websocket.listen execution: filters[:symbol], &ablock
+      else
+        get '', filters.merge(resource: :execution)
+      end
     end
 
     private

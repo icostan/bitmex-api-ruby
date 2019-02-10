@@ -9,7 +9,12 @@ RSpec.describe Bitmex::Instrument do
       expect(instruments.size).to eq 10
       expect(instruments.first.rootSymbol).to include 'XBT'
     end
-    it 'with websocket api'
+    it 'with websocket api' do
+      client.instrument.all symbol: 'XBTUSD' do |instrument|
+        expect(instrument.symbol).to eq 'XBTUSD'
+        client.websocket.stop
+      end
+    end
   end
 
   it '#active' do

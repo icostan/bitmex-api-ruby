@@ -16,7 +16,12 @@ RSpec.describe Bitmex::Client do
       expect(funding.first.fundingRate).to eq 0.0005
       expect(funding.first.fundingRateDaily).to eq 0.0005
     end
-    it 'with websocket api'
+    it 'with websocket api' do
+      client.funding do |funding|
+        expect(funding.symbol).not_to be_nil
+        client.websocket.stop
+      end
+    end
   end
 
   describe '#insurance' do
@@ -26,7 +31,12 @@ RSpec.describe Bitmex::Client do
       expect(insurance.first.currency).to eq 'XBt'
       expect(insurance.first.walletBalance).to be >= 5103298681
     end
-    it 'with websocket api'
+    it 'with websocket api' do
+      client.insurance do |insurance|
+        expect(insurance.walletBalance).to be > 0
+        client.websocket.stop
+      end
+    end
   end
 
   it '#leaderboard' do
@@ -40,7 +50,13 @@ RSpec.describe Bitmex::Client do
       liquidations = client.liquidations
       expect(liquidations.size).to be >= 0
     end
-    it 'with websocket api'
+    it 'with websocket api' do
+      skip 'non-deterministic test'
+      client.liquidations symbol: 'XBTUSD' do |liquidation|
+        expect(liquidation.qty).to be > 0
+        client.websocket.stop
+      end
+    end
   end
 
   describe '#orderbook' do
@@ -51,7 +67,12 @@ RSpec.describe Bitmex::Client do
       expect(orderbook.first.side).to eq 'Sell'
       expect(orderbook.last.side).to eq 'Buy'
     end
-    it 'with websocket api'
+    it 'with websocket api' do
+      client.orderbook 'XBTUSD' do |orderbook|
+        expect(orderbook.size).to be > 0
+        client.websocket.stop
+      end
+    end
   end
 
   it '#schema' do
@@ -68,20 +89,23 @@ RSpec.describe Bitmex::Client do
       expect(settlement.first.settlementType).to eq 'Settlement'
       expect(settlement.first.settlePrice).to be_nil
     end
-    it 'with ws api'
+    it 'with websocket api' do
+      client.settlement do |settlements|
+        expect(settlements.size).to be > 0
+        client.websocket.stop
+      end
+    end
   end
 
   describe '#listen' do
     it 'to single topic' do
       client.websocket.listen trade: 'XBTUSD' do |trade|
-        # puts trade
         expect(trade.symbol).to eq 'XBTUSD'
         client.websocket.stop
       end
     end
     it 'to multiple topics' do
       client.websocket.listen instrument: 'XBTUSD', trade: 'XBTUSD' do |data|
-        # puts data
         expect(data.symbol).to eq 'XBTUSD'
         client.websocket.stop
       end

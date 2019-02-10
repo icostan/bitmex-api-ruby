@@ -5,12 +5,18 @@ RSpec.describe Bitmex::Position do
 
   describe '#all' do
     it 'with rest api' do
-      positions = client.positions
+      positions = client.positions.all
       expect(positions.size).to eq 1
       expect(positions.first.symbol).to eq 'XBTUSD'
       expect(positions.first.currentQty).to eq 10
     end
-    it 'with websocket api'
+    it 'with websocket api' do
+      client.positions.all do |position|
+        expect(position.symbol).to eq 'XBTUSD'
+        expect(position.currentQty).to eq 10
+        client.websocket.stop
+      end
+    end
   end
 
   it '#isolate' do

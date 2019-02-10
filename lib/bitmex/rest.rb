@@ -43,7 +43,7 @@ module Bitmex
       options[:headers] = rest_headers 'PUT', path, body, json: json if auth
 
       response = self.class.put "#{domain_url}#{path}", options
-      yield response
+      block_given? ? yield(response) : response_handler(response)
     end
 
     def post(path, params: {}, auth: true, json: true)
@@ -54,7 +54,7 @@ module Bitmex
       options[:headers] = rest_headers 'POST', path, body, json: json if auth
 
       response = self.class.post "#{domain_url}#{path}", options
-      yield response
+      block_given? ? yield(response) : response_handler(response)
     end
 
     def delete(path, params: {}, auth: true, json: true)
@@ -65,7 +65,7 @@ module Bitmex
       options[:headers] = rest_headers 'DELETE', path, body, json: json if auth
 
       response = self.class.delete "#{domain_url}#{path}", options
-      yield response
+      block_given? ? yield(response) : response_handler(response)
     end
 
     def base_path(resource, action = '')
@@ -87,7 +87,7 @@ module Bitmex
     end
 
     def response_handler(response)
-      raise response.body unless response.success?
+      raise Bitmex::ForbiddenError, response.body unless response.success?
 
       if response.parsed_response.is_a? Array
         response.to_a.map { |s| Bitmex::Mash.new s }

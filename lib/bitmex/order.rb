@@ -4,8 +4,8 @@ module Bitmex
   class Order < Base
     attr_reader :orderID, :clOrdID
 
-    def initialize(rest, orderID = nil, clOrdID = nil)
-      super rest
+    def initialize(rest, websocket = nil, orderID = nil, clOrdID = nil)
+      super rest, websocket
       @orderID = orderID
       @clOrdID = clOrdID
     end
@@ -13,9 +13,12 @@ module Bitmex
     # Get your orders
     # @!macro bitmex.filters
     # @return [Array] the orders
-    def all(filters = {})
-      rest.get order_path, params: filters, auth: true do |response|
-        response_handler response
+    # @yield [Hash] the order
+    def all(filters = {}, &ablock)
+      if block_given?
+        websocket.listen order: filters[:symbol], &ablock
+      else
+        rest.get order_path, params: filters, auth: true
       end
     end
 
@@ -30,9 +33,7 @@ module Bitmex
     # @return [Bitmex::Mash] the updated order
     def update(attributes)
       params = attributes.merge orderID: orderID, origClOrdID: clOrdID
-      rest.put order_path, params: params do |response|
-        response_handler response
-      end
+      rest.put order_path, params: params
     end
 
     # Place new order
@@ -53,9 +54,7 @@ module Bitmex
     # @return [Bitmex::Mash] the created order
     def create(symbol, attributes)
       params = attributes.merge symbol: symbol
-      rest.post order_path, params: params do |response|
-        response_handler response
-      end
+      rest.post order_path, params: params
     end
 
     # Cancel an order

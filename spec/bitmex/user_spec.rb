@@ -18,14 +18,14 @@ RSpec.describe Bitmex::User do
     end
   end
 
-  xit '#update_attributes'
+  # xit '#update_attributes'
 
   it '#affiliate_status' do
     status = client.user.affiliate_status
     expect(status.affiliatePayout).to be_nil
   end
 
-  xit '#cancel_withdrawal'
+  # xit '#cancel_withdrawal'
 
   it '#check_referral_code' do
     discount = client.user.check_referral_code '7wUFhY'
@@ -39,17 +39,17 @@ RSpec.describe Bitmex::User do
     expect(commission.XBTUSD.settlementFee).to eq 0
   end
 
-  xit '#communication_token'
-  xit '#confirm_email'
-  xit '#confirm_enable_tfa'
-  xit '#confirm_withdrawal'
+  # xit '#communication_token'
+  # xit '#confirm_email'
+  # xit '#confirm_enable_tfa'
+  # xit '#confirm_withdrawal'
 
   it '#deposit_address' do
     address = client.user.deposit_address 'XBt'
     expect(address).to eq '"2NBMEXtoNm2fJgQEQ85xLTdzHfNMdKYTses"'
   end
 
-  xit '#disable_tfa'
+  # xit '#disable_tfa'
 
   it '#execution_history' do
     history = client.user.execution_history 'XBTUSD', Date.new(2019, 1, 17)
@@ -57,8 +57,8 @@ RSpec.describe Bitmex::User do
     expect(history.first.orderQty).to eq 100
   end
 
-  xit '#logout'
-  xit '#logout_all'
+  # xit '#logout'
+  # xit '#logout_all'
 
   it '#margin' do
     margin = client.user.margin 'XBt'
@@ -70,9 +70,9 @@ RSpec.describe Bitmex::User do
     expect(fee.minFee).to eq 20000
   end
 
-  xit '#preferences'
-  xit '#request_enable_tfa'
-  xit '#request_withdrawal'
+  # xit '#preferences'
+  # xit '#request_enable_tfa'
+  # xit '#request_withdrawal'
 
   it '#wallet' do
     wallet = client.user.wallet
@@ -104,10 +104,17 @@ RSpec.describe Bitmex::User do
 
   describe '#executions' do
     it 'with rest api' do
+      # FIXME: invalid signature for multiple levels filters
       # executions = client.user.executions filter: { execType: ['Settlement', 'Trade'] }
       executions = client.user.executions count: 5
       expect(executions.size).to eq 5
     end
-    it 'with websocket api'
+    it 'with websocket api' do
+      skip 'non-deterministic test'
+      client.user.executions symbol: 'XBTUSD' do |execution|
+        expect(execution.symbol).to eq 'XBTUSD'
+        client.websocket.stop
+      end
+    end
   end
 end
