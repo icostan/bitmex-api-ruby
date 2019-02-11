@@ -3,9 +3,18 @@ require 'spec_helper'
 RSpec.describe Bitmex::Client do
   let(:client) { Bitmex::Client.new testnet: true, api_key: ENV['API_KEY'], api_secret: ENV['API_SECRET'] }
 
-  it '#announcement' do
-    announcements = client.announcements
-    expect(announcements.first.title).not_to be_nil
+  describe '#announcement' do
+    it 'with rest api' do
+      announcements = client.announcements
+      expect(announcements.first.title).not_to be_nil
+    end
+    it 'with websocket api' do
+      skip 'non-deterministic test'
+      client.announcements do |announcement|
+        expect(announcement.symbol).not_to be_nil
+        client.websocket.stop
+      end
+    end
   end
 
   describe '#funding' do
@@ -83,15 +92,15 @@ RSpec.describe Bitmex::Client do
 
   describe '#settlement' do
     it 'with rest api' do
-      settlement = client.settlement
-      expect(settlement).to be_kind_of Array
-      expect(settlement.first.symbol).to eq 'XBU24H'
-      expect(settlement.first.settlementType).to eq 'Settlement'
-      expect(settlement.first.settlePrice).to be_nil
+      settlements = client.settlements
+      expect(settlements).to be_kind_of Array
+      expect(settlements.first.symbol).to eq 'XBU24H'
+      expect(settlements.first.settlementType).to eq 'Settlement'
+      expect(settlements.first.settledPrice).to be > 0
     end
     it 'with websocket api' do
-      client.settlement do |settlements|
-        expect(settlements.size).to be > 0
+      client.settlements do |settlement|
+        expect(settlement.settledPrice).to be >= 0
         client.websocket.stop
       end
     end

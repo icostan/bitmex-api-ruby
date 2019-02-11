@@ -15,8 +15,12 @@ module Bitmex
 
     # Get site announcements
     # @return [Array] the public announcements
-    def announcements
-      rest.get :announcement
+    def announcements(&ablock)
+      if block_given?
+        websocket.listen announcement: nil, &ablock
+      else
+        rest.get :announcement
+      end
     end
 
     # Persistent API Keys for Developers
@@ -154,7 +158,7 @@ module Bitmex
     # Get settlement history
     # @return [Array] the settlement history
     # @yield [Hash] the settlement data
-    def settlement(&ablock)
+    def settlements(&ablock)
       if block_given?
         websocket.listen settlement: nil, &ablock
       else
