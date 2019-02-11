@@ -19,7 +19,7 @@
 ** DONE orderbook, order resource
    CLOSED: [2019-01-29 Tue] SCHEDULED: <2019-01-29 Tue>
 ** refactoring: use class methods when working with multiple entities
-** issue: {"error":{"message":"Signature not valid.","name":"HTTPError"}} in user#executions
+** bug: {"error":{"message":"Signature not valid.","name":"HTTPError"}} in user#executions
 ** DONE liquidation, leaderboard, insurance, instrument, funding, execution, chat, announcement
    CLOSED: [2019-01-30 Wed] SCHEDULED: <2019-01-30 Wed>
 ** DONE refactoring: extract websocket common logic
@@ -29,3 +29,5 @@
 ** DONE add idiomatic websocket support for all resources
    CLOSED: [2019-02-10 Sun 16:57] SCHEDULED: <2019-02-10 Sun>
 ** refactoring: make user model to extend base class as well
+** DONE Release 1.0: API endpoints, examples in README
+   CLOSED: [2019-02-11 Mon] SCHEDULED: <2019-02-11 Mon>

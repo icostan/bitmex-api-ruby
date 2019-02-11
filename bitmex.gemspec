@@ -1,4 +1,4 @@
-lib = File.expand_path('../lib', __FILE__)
+lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'bitmex/version'
 
@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Iulian Costan']
   spec.email         = ['iulian.costan@gmail.com']
 
-  spec.summary       = %q{Idiomatic Ruby library for BitMEX API}
-  spec.description   = %q{Fully-featured library for Rest/Websocket BitMEX API}
+  spec.summary       = 'Fully-featured, idiomatic Ruby library for BitMEX API'
+  spec.description   = 'Fully-featured, idiomatic Ruby library for BitMEX API'
   spec.homepage      = 'https://github.com/icostan/bitmex-api-ruby'
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
@@ -27,7 +27,7 @@ Gem::Specification.new do |spec|
 
   # Specify which files should be added to the gem when it is released.
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
-  spec.files         = Dir.chdir(File.expand_path('..', __FILE__)) do
+  spec.files = Dir.chdir(File.expand_path(__dir__)) do
     `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   end
   spec.bindir        = 'exe'

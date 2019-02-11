@@ -37,7 +37,7 @@ require 'bitmex-api'
 
 client = Bitmex::Client.new
 
-##### or add api_key, api_secret if you want to access private APIs
+# or add api_key, api_secret if you want to access private APIs
 client = Bitmex::Client.new api_key: 'KEY', api_secret: 'SECRET'
 ```
 
