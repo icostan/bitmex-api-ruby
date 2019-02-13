@@ -5,6 +5,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+- functional state transfer from one websocket block to the next
+### Fixed
+- fix topic with multiple symbols issue
+
 ## [0.1.0] - 2019-02-11
 ### Added
 - authentication via websocket

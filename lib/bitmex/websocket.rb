@@ -21,7 +21,7 @@ module Bitmex
 
     # Subscribe to a specific topic and optionally filter by symbol
     # @param topic [String] topic to subscribe to e.g. 'trade'
-    # @param symbol [String] symbol to filter by e.g. 'XBTUSD'
+    # @param symbol [String, Array] symbol or symbols to filter
     # @yield [Array] data payload
     def subscribe(topic, symbol = nil, auth: false, &callback)
       raise 'callback block is required' unless block_given?
@@ -44,13 +44,18 @@ module Bitmex
 
     # Listen to generic topics
     # @param topics [Hash] topics to listen to e.g. { trade: "XBTUSD" }
-    # @yield [data] data pushed via websocket
+    # @yieldparam [Hash] data pushed via websocket
+    # @yieldparam [any] result state of the previous block execution if any
     def listen(topics, &ablock)
       EM.run do
         connect
 
         topics.each do |topic, symbol|
-          subscribe topic, symbol, &ablock
+          symbols = [symbol] if symbol.nil? || symbol.is_a?(String)
+          symbols ||= symbol
+          symbols.each do |symbol|
+            subscribe topic, symbol, &ablock
+          end
         end
       end
     end
@@ -83,7 +88,7 @@ module Bitmex
         callback = @callbacks[topic]
         if callback
           data&.each do |payload|
-            callback.yield Bitmex::Mash.new(payload)
+            @result = callback.yield Bitmex::Mash.new(payload), @result
           end
         else
           puts "==> #{event.data}"

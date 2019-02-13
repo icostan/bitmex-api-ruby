@@ -31,3 +31,5 @@
 ** refactoring: make user model to extend base class as well
 ** DONE Release 1.0: API endpoints, examples in README
    CLOSED: [2019-02-11 Mon] SCHEDULED: <2019-02-11 Mon>
+** DONE add triangular, functional state transfer, fix multiple symbols issue
+   CLOSED: [2019-02-13 Wed] SCHEDULED: <2019-02-13 Wed>

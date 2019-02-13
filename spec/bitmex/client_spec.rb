@@ -107,14 +107,26 @@ RSpec.describe Bitmex::Client do
   end
 
   describe '#listen' do
-    it 'to single topic' do
+    it 'to single topic, single symbol' do
       client.websocket.listen trade: 'XBTUSD' do |trade|
         expect(trade.symbol).to eq 'XBTUSD'
         client.websocket.stop
       end
     end
-    it 'to multiple topics' do
+    it 'to single topic, multiple symbols' do
+      client.websocket.listen trade: ['XBTUSD', 'ETHUSD'] do |data|
+        expect(%(XBTUSD ETHUSD)).to include data.symbol
+        client.websocket.stop
+      end
+    end
+    it 'to multiple topics, single symbol' do
       client.websocket.listen instrument: 'XBTUSD', trade: 'XBTUSD' do |data|
+        expect(data.symbol).to eq 'XBTUSD'
+        client.websocket.stop
+      end
+    end
+    it 'to multiple topics, multiple symbols' do
+      client.websocket.listen instrument: [ 'XBTUSD', 'ETHUSD'], trade: 'XBTUSD' do |data|
         expect(data.symbol).to eq 'XBTUSD'
         client.websocket.stop
       end
