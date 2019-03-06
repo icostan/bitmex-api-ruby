@@ -39,7 +39,7 @@ RSpec.describe Bitmex::Instrument do
 
   it '#intervals' do
     intervals = client.instrument.intervals
-    expect(intervals.intervals.first).to eq 'ETH:quarterly'
+    expect(intervals.intervals.first).to include 'ETH'
     expect(intervals.symbols.first).to include 'ETH'
   end
 end
