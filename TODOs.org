@@ -33,3 +33,5 @@
    CLOSED: [2019-02-11 Mon] SCHEDULED: <2019-02-11 Mon>
 ** DONE add triangular, functional state transfer, fix multiple symbols issue
    CLOSED: [2019-02-13 Wed] SCHEDULED: <2019-02-13 Wed>
+** DONE release 0.1.1
+   CLOSED: [2019-03-06 Wed] SCHEDULED: <2019-03-06 Wed>
