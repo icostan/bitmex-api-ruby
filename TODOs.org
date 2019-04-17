@@ -7,8 +7,6 @@
    CLOSED: [2019-01-16 Wed] SCHEDULED: <2019-01-15 Tue> DEADLINE: <2019-01-16 Wed>
 ** DONE auth for private subscription topics
    CLOSED: [2019-02-01 Fri] SCHEDULED: <2019-02-01 Fri>
-** move from rspec to minitest
-** configure autorun
 ** hearbeat, ping/pong
 ** DONE implement user actions get/put/post
    CLOSED: [2019-01-22 Tue] SCHEDULED: <2019-01-17 Thu>
