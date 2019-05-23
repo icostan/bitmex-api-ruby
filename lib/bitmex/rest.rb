@@ -29,7 +29,7 @@ module Bitmex
 
       options = {}
       options[:query] = params unless params.empty?
-      options[:headers] = rest_headers 'GET', path, '' if auth
+      options[:headers] = rest_headers 'GET', path, '', params if auth
 
       response = self.class.get "#{domain_url}#{path}", options
       block_given? ? yield(response) : response_handler(response)
@@ -40,7 +40,7 @@ module Bitmex
 
       options = {}
       options[:body] = body
-      options[:headers] = rest_headers 'PUT', path, body, json: json if auth
+      options[:headers] = rest_headers 'PUT', path, body, params, json: json if auth
 
       response = self.class.put "#{domain_url}#{path}", options
       block_given? ? yield(response) : response_handler(response)
@@ -51,7 +51,7 @@ module Bitmex
 
       options = {}
       options[:body] = body
-      options[:headers] = rest_headers 'POST', path, body, json: json if auth
+      options[:headers] = rest_headers 'POST', path, body, params, json: json if auth
 
       response = self.class.post "#{domain_url}#{path}", options
       block_given? ? yield(response) : response_handler(response)
@@ -62,7 +62,7 @@ module Bitmex
 
       options = {}
       options[:body] = body
-      options[:headers] = rest_headers 'DELETE', path, body, json: json if auth
+      options[:headers] = rest_headers 'DELETE', path, body, params, json: json if auth
 
       response = self.class.delete "#{domain_url}#{path}", options
       block_given? ? yield(response) : response_handler(response)
@@ -72,8 +72,8 @@ module Bitmex
       "/api/v1/#{resource}/#{action}"
     end
 
-    def rest_headers(verb, path, body, json: true)
-      headers = headers verb, path, body
+    def rest_headers(verb, path, body, query, json: true)
+      headers = headers verb, path, body, query
       if json
         headers['Content-Type'] = 'application/json'
       else
@@ -82,8 +82,8 @@ module Bitmex
       headers
     end
 
-    def headers(verb, path, body)
-      Bitmex.headers api_key, api_secret, verb, path, body
+    def headers(verb, path, body, query)
+      Bitmex.headers api_key, api_secret, verb, path, body, query
     end
 
     def response_handler(response)

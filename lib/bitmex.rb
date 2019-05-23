@@ -28,22 +28,26 @@ module Bitmex
   TESTNET_HOST = 'testnet.bitmex.com'.freeze
   MAINNET_HOST = 'www.bitmex.com'.freeze
 
-  def self.signature(api_secret, verb, path, expires, params)
-    params = '' if params.nil?
-    params = params.to_s unless params.is_a? String
+  def self.signature(api_secret, verb, path, expires, body, query)
+    body = '' if body.nil?
+    body = body.to_s unless body.is_a? String
 
-    data = verb + path + expires.to_s + params
+    if query != nil && query.is_a?(Hash) && !query.empty?
+      path += "?#{URI.encode_www_form(query)}"
+    end
+
+    data = verb + path + expires.to_s + body
     OpenSSL::HMAC.hexdigest 'SHA256', api_secret, data
   end
 
-  def self.headers(api_key, api_secret, verb, path, body)
+  def self.headers(api_key, api_secret, verb, path, body, query)
     return {} unless api_key || api_secret
 
     expires = Time.now.utc.to_i + 60
     {
       'api-expires' => expires.to_s,
       'api-key' => api_key,
-      'api-signature' => Bitmex.signature(api_secret, verb, path, expires, body)
+      'api-signature' => Bitmex.signature(api_secret, verb, path, expires, body, query)
     }
   end
 end
