@@ -3,14 +3,14 @@ sudo: false
 language: ruby
 cache: bundler
 rvm:
-  - 2.5.3
+  - 2.6.3
 
 env:
   global:
     - CC_TEST_REPORTER_ID=62a2cea238cf89f14f968d9a91fe41af7a11f414f6cc9194df7abc7887e61f6e
 
 before_install:
-  - gem install bundler -v 1.17.1
+  - gem install bundler
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
 
