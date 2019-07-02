@@ -51,8 +51,8 @@ RSpec.describe Bitmex::User do
 
   # xit '#disable_tfa'
 
-  it '#execution_history' do
-    history = client.user.execution_history 'XBTUSD', Date.new(2019, 1, 17)
+  xit '#execution_history' do
+    history = client.user.execution_history 'XBTUSD', Date.new(2019, 7, 2)
     expect(history.first.side).to eq 'Buy'
     expect(history.first.orderQty).to eq 100
   end

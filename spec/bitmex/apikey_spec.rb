@@ -5,7 +5,7 @@ RSpec.describe Bitmex::Apikey do
 
   it '#all' do
     keys = client.apikey.all
-    expect(keys.size).to eq 2
+    expect(keys.size).to eq 1
     expect(keys.first['name']).to eq 'bitmex-api-ruby'
   end
 end

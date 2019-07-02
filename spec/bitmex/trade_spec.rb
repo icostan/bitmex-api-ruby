@@ -5,13 +5,13 @@ RSpec.describe Bitmex::Trade do
 
   describe '#all' do
     it 'with rest api' do
-      trades = client.trades.all symbol: 'XBTUSD', startTime: '2019-01-01', count: 10
+      trades = client.trades.all symbol: 'XBTUSD', startTime: '2019-07-01', count: 10
       expect(trades.size).to eq 10
-      expect(trades.first.timestamp).to eq '2019-01-01T00:00:02.119Z'
+      expect(trades.first.timestamp).to eq '2019-07-01T00:00:07.736Z'
       expect(trades.first.symbol).to eq 'XBTUSD'
       expect(trades.first.side).to eq 'Sell'
       expect(trades.first.size).to eq 10
-      expect(trades.first.price).to eq 3698
+      expect(trades.first.price).to eq 11213.5
     end
     it 'with websocket api' do
       client.trades.all symbol: 'XBTUSD' do |trade|

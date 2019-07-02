@@ -26,7 +26,7 @@ RSpec.describe Bitmex::Instrument do
 
   it '#indices' do
     indices = client.instrument.indices
-    expect(indices.size).to eq 60
+    expect(indices.size).to be > 60
     expect(indices.first.symbol).to start_with '.'
   end
 
