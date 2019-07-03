@@ -7,9 +7,13 @@ RSpec.describe Bitmex::Order do
     it 'with rest api' do
       orders = client.orders.all
       expect(orders.size).to be >= 1
-      # expect(orders.first.ordStatus).to eq 'Filled'
-      # expect(orders.first.orderQty).to eq 100
-      # expect(orders.first.side).to eq 'Sell'
+      expect(orders.first.ordStatus).to eq 'Filled'
+      expect(orders.first.orderQty).to eq 10
+      expect(orders.first.side).to eq 'Sell'
+    end
+    it 'with rest api and query parameters' do
+      orders = client.orders.all symbol: 'ETHUSD'
+      expect(orders.size).to eq 0
     end
     xit 'with websocket api' do
       client.orders.all symbol: 'XBTUSD' do |data|

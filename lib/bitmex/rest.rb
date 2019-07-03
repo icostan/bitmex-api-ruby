@@ -40,7 +40,7 @@ module Bitmex
 
       options = {}
       options[:body] = body
-      options[:headers] = rest_headers 'PUT', path, body, params, json: json if auth
+      options[:headers] = rest_headers 'PUT', path, body, nil, json: json if auth
 
       response = self.class.put "#{domain_url}#{path}", options
       block_given? ? yield(response) : response_handler(response)
@@ -51,7 +51,7 @@ module Bitmex
 
       options = {}
       options[:body] = body
-      options[:headers] = rest_headers 'POST', path, body, params, json: json if auth
+      options[:headers] = rest_headers 'POST', path, body, nil, json: json if auth
 
       response = self.class.post "#{domain_url}#{path}", options
       block_given? ? yield(response) : response_handler(response)
@@ -62,7 +62,7 @@ module Bitmex
 
       options = {}
       options[:body] = body
-      options[:headers] = rest_headers 'DELETE', path, body, params, json: json if auth
+      options[:headers] = rest_headers 'DELETE', path, body, nil, json: json if auth
 
       response = self.class.delete "#{domain_url}#{path}", options
       block_given? ? yield(response) : response_handler(response)

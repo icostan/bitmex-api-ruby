@@ -97,7 +97,7 @@ module Bitmex
     end
 
     def headers
-      Bitmex.headers api_key, api_secret, 'GET', '/realtime', ''
+      Bitmex.headers api_key, api_secret, 'GET', '/realtime', '', ''
     end
 
     # def authenticate
