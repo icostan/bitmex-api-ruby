@@ -39,7 +39,7 @@
 ** DONE release 0.1.1
    CLOSED: [2019-03-06 Wed] SCHEDULED: <2019-03-06 Wed>
 ** TODO bitmex-api-ruby maintenance
-   SCHEDULED: <2019-08-02 Fri +1m>
+   SCHEDULED: <2019-09-09 Fri +2m>
    :PROPERTIES:
    :LAST_REPEAT: [2019-07-03 Wed 18:52]
    :END:
