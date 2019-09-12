@@ -104,9 +104,7 @@ RSpec.describe Bitmex::User do
 
   describe '#executions' do
     it 'with rest api' do
-      # FIXME: invalid signature for multiple levels filters
-      # executions = client.user.executions filter: { execType: ['Settlement', 'Trade'] }
-      executions = client.user.executions count: 5
+      executions = client.user.executions filter: { execType: "Trade" }, count: 5
       expect(executions.size).to eq 5
     end
     it 'with websocket api' do

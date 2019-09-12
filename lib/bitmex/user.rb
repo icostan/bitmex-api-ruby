@@ -154,7 +154,11 @@ module Bitmex
       # TODO: find a better way to handle multiple parameters, dig into HTTParty
       path += '?' if params.size.positive?
       params.each do |key, value|
-        path += "#{key}=#{value}&"
+        if value.is_a? Hash
+          path += "#{key}=#{URI.escape(value.to_json)}&"
+        else
+          path += "#{key}=#{value}&"
+        end
       end
       path
     end

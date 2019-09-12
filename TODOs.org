@@ -1,4 +1,11 @@
 * Tasks                                                              :BITMEX:
+** TODO bitmex-api-ruby maintenance
+   SCHEDULED: <2019-12-09 Mon +3m>
+   :PROPERTIES:
+   :LAST_REPEAT: [2019-09-12 Thu 18:25]
+   :END:
+   - State "DONE"       from "TODO"       [2019-09-12 Thu 18:25]
+   - State "DONE"       from "TODO"       [2019-07-03 Wed 18:52]
 ** DONE initial gem release
    SCHEDULED: <2019-01-03 Thu> CLOSED: <2019-01-03 Thu>
 ** DONE websocket API
@@ -17,7 +24,8 @@
 ** DONE orderbook, order resource
    CLOSED: [2019-01-29 Tue] SCHEDULED: <2019-01-29 Tue>
 ** refactoring: use class methods when working with multiple entities
-** bug: {"error":{"message":"Signature not valid.","name":"HTTPError"}} in user#executions
+** DONE bug: {"error":{"message":"Signature not valid.","name":"HTTPError"}} in user#executions
+   CLOSED: [2019-09-12 Thu 18:24]
 ** DONE bug: handle query in websocket and skip in POST/PUT/DELETE operations
    CLOSED: [2019-07-03 Wed 18:06]
    :LOGBOOK:
@@ -38,9 +46,3 @@
    CLOSED: [2019-02-13 Wed] SCHEDULED: <2019-02-13 Wed>
 ** DONE release 0.1.1
    CLOSED: [2019-03-06 Wed] SCHEDULED: <2019-03-06 Wed>
-** TODO bitmex-api-ruby maintenance
-   SCHEDULED: <2019-09-09 Fri +2m>
-   :PROPERTIES:
-   :LAST_REPEAT: [2019-07-03 Wed 18:52]
-   :END:
-   - State "DONE"       from "TODO"       [2019-07-03 Wed 18:52]

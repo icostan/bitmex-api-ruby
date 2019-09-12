@@ -19,7 +19,7 @@ RSpec.describe Bitmex::Instrument do
 
   it '#active' do
     instruments = client.instrument.active
-    expect(instruments.size).to eq 16
+    expect(instruments.size).to be > 16
     expect(instruments.first.rootSymbol).to include 'XRP'
     expect(instruments.first.state).to include 'Open'
   end

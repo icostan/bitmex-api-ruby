@@ -25,6 +25,6 @@ RSpec.describe Bitmex::Stats do
     expect(history.size).to eq 43
     expect(history.first.rootSymbol).to eq 'A50'
     expect(history.first.currency).to eq 'USD'
-    expect(history.first.turnover).to eq 124596880
+    expect(history.first.turnover).to be > 50_000_000
   end
 end
