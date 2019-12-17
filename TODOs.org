@@ -1,9 +1,13 @@
-* Tasks                                                              :BITMEX:
+* [[elisp:(org-projectile-open-project%20"bitmex-api-ruby")][bitmex-api-ruby]] [17/18]
+  :PROPERTIES:
+  :CATEGORY: bitmex-api-ruby
+  :END:
 ** TODO bitmex-api-ruby maintenance
-   SCHEDULED: <2019-12-09 Mon +3m>
+   SCHEDULED: <2020-06-09 Tue +6m>
    :PROPERTIES:
-   :LAST_REPEAT: [2019-09-12 Thu 18:25]
+   :LAST_REPEAT: [2019-12-17 Tue 10:53]
    :END:
+   - State "DONE"       from "TODO"       [2019-12-17 Tue 10:53]
    - State "DONE"       from "TODO"       [2019-09-12 Thu 18:25]
    - State "DONE"       from "TODO"       [2019-07-03 Wed 18:52]
 ** DONE initial gem release
