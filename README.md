@@ -43,7 +43,7 @@ client = Bitmex::Client.new api_key: 'KEY', api_secret: 'SECRET'
 
 #### REST API
 
-Get last 10 messages in English channel:
+Get last 10 messages from English channel:
 
 ```ruby
 messages = client.chat.messages channelID: 1, count: 10, reverse: true
@@ -86,7 +86,7 @@ All Websocket API blocks yield a pseudo-object `Bitmex::Mash`.
 
 #### Whales watching
 
-Filtering traders bigger than 10 XBT {file:bin/whales-watching.rb}
+Filtering trades bigger than 10 XBT {file:bin/whales-watching.rb}
 
 ```ruby
 client = Bitmex::Client.new
