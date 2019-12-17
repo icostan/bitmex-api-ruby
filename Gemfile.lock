@@ -88,6 +88,7 @@ GEM
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.2)
+    simplecov-lcov (0.7.0)
     thread_safe (0.3.6)
     unicode-display_width (1.6.0)
     virtus (1.0.5)
@@ -115,6 +116,7 @@ DEPENDENCIES
   rspec
   rubocop
   simplecov
+  simplecov-lcov
 
 BUNDLED WITH
    2.0.2
