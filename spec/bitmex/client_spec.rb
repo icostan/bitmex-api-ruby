@@ -51,7 +51,7 @@ RSpec.describe Bitmex::Client do
   it '#leaderboard' do
     leaders = client.leaderboard
     expect(leaders.size).to eq 25
-    expect(leaders.first.name).to include 'Alex'
+    expect(leaders.first.name).to include '-'
   end
 
   describe '#liquidations' do

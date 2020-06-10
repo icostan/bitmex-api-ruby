@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe Bitmex::Quote do
@@ -5,9 +7,8 @@ RSpec.describe Bitmex::Quote do
 
   describe '#all' do
     it 'with rest api' do
-      expect do
-        client.quotes.all
-      end.to raise_error Bitmex::ForbiddenError
+      quotes = client.quotes.all
+      expect(quotes.first.askPrice).to be > 0
     end
     it 'with websocket api' do
       client.quotes.all symbol: 'XBTUSD' do |quote|
@@ -21,9 +22,8 @@ RSpec.describe Bitmex::Quote do
 
   describe '#bucketed' do
     it 'via rest api' do
-      expect do
-        client.quotes.bucketed '1h'
-      end.to raise_error Bitmex::ForbiddenError
+      buckets = client.quotes.bucketed '1h'
+      expect(buckets.first.symbol).to include 'XBT'
     end
     it 'via websocket api' do
       client.quotes.bucketed '1h', symbol: 'XBTUSD' do |bucket|
