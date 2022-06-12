@@ -1,12 +1,16 @@
 * [[elisp:(org-projectile-open-project%20"bitmex-api-ruby")][bitmex-api-ruby]] [17/18]
   :PROPERTIES:
   :CATEGORY: bitmex
+  :ID:       1cb38a6d-1bc8-43c9-b87f-27dec4aec5bc
   :END:
-** TODO bitmex-api-ruby maintenance
-   SCHEDULED: <2020-12-09 Wed +6m>
+** bitmex-api-ruby maintenance
    :PROPERTIES:
-   :LAST_REPEAT: [2020-06-10 Wed 08:12]
+   :LAST_REPEAT: [2021-12-11 Sat 08:41]
+   :ID:       16a44e5c-3e5b-4919-922a-29a28ccf1045
    :END:
+   - State "DONE"       from "TODO"       [2021-12-11 Sat 08:41]
+   - State "DONE"       from "TODO"       [2021-06-09 Wed 08:31]
+   - State "DONE"       from "TODO"       [2020-12-14 Mon 09:05]
    - State "DONE"       from "TODO"       [2020-06-10 Wed 08:12]
    - State "DONE"       from "TODO"       [2019-12-17 Tue 10:53]
    - State "DONE"       from "TODO"       [2019-09-12 Thu 18:25]
